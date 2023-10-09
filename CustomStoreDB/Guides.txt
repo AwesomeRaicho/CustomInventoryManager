@@ -1,0 +1,9 @@
+﻿*** STARTING GUIDELINES ***
+
+1. Make Entity
+2. Make DTOs
+3. Make Tests
+4. Create Service class
+
+## FOR COSTUMES
+

@@ -1,0 +1,358 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\CustomStoreDB\\CustomStoreDB.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\CustomStoreDB\\CustomStoreDB.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\CustomStoreDB\\CustomStoreDB.csproj",
+        "projectName": "CustomStoreDB",
+        "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\CustomStoreDB\\CustomStoreDB.csproj",
+        "packagesPath": "C:\\Users\\users\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\CustomStoreDB\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\users\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj"
+              },
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj",
+        "projectName": "Entities",
+        "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj",
+        "packagesPath": "C:\\Users\\users\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\users\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj",
+        "projectName": "ServicesContracts",
+        "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj",
+        "packagesPath": "C:\\Users\\users\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\users\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj",
+        "projectName": "ServicesTests",
+        "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj",
+        "packagesPath": "C:\\Users\\users\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\users\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj"
+              },
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.1.0, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj",
+        "projectName": "Services",
+        "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\users\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\users\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\Entities\\Entities.csproj"
+              },
+              "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj": {
+                "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

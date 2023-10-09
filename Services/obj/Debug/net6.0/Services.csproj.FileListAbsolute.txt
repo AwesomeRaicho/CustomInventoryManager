@@ -1,0 +1,17 @@
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\Services.deps.json
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\Services.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\Services.pdb
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\Entities.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\Entities.pdb
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.csproj.AssemblyReference.cache
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.AssemblyInfoInputs.cache
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.AssemblyInfo.cs
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.csproj.CoreCompileInputs.cache
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.csproj.CopyComplete
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\refint\Services.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\Services.pdb
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\obj\Debug\net6.0\ref\Services.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\ServicesContracts.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\Services\bin\Debug\net6.0\ServicesContracts.pdb
