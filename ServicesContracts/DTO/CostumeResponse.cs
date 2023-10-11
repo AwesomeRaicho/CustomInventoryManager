@@ -16,6 +16,8 @@ namespace ServiceContracts
         public int? Age { get; set; }
         public double? PurchasePrice { get; set; }
         public DateTime? EntryDate { get; set; }
+        public DateTime? ExitDate { get; set; }
+
 
         public override bool Equals(object? obj)
         {
@@ -29,7 +31,6 @@ namespace ServiceContracts
                 this.CostumeName == costume_to_compare.CostumeName &&
                 this.CostumeID == costume_to_compare.CostumeID &&
                 this.EntryDate == costume_to_compare.EntryDate;
-
         }
 
         public override int GetHashCode()
@@ -51,6 +52,7 @@ namespace ServiceContracts
                 Age = costume.Age,
                 PurchasePrice = costume.PurchasePrice,
                 EntryDate = costume.EntryDate,
+                ExitDate = costume.ExitDate,
             };
         }
     }

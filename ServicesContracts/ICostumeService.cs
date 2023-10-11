@@ -27,14 +27,16 @@ namespace ServiceContracts
         /// </summary>
         /// <param name="costumeID">CostumeID of the costume</param>
         /// <returns>CostumeResponse that be</returns>
-        CostumeResponse GetCostumeByCostumeID(Guid? costumeID);
+        CostumeResponse? GetCostumeByCostumeID(Guid? costumeID);
+
+        List<CostumeResponse> GetAllSoldCostumes();
 
         /// <summary>
-        /// Removes a costume and sents it to sold history
+        /// Removes a costume and sents it to sold history DB
         /// </summary>
         /// <param name="costumeID">costume ID to remove</param>
         /// <returns>bool with true if successfully removed of false if removal failed</returns>
-        bool RemoveCostume(Guid? costumeID);
+        bool SoldCostumeByCostumeID(Guid? costumeID);
 
         /// <summary>
         /// Deletes costume completly from the DB

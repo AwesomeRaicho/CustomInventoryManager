@@ -140,5 +140,152 @@ namespace ServicesTests
 
         }
         #endregion
+
+        #region GetCostumeByCostumeID
+
+        [Fact]
+        public void GetCostumeByCostumeID_NullCostumeID()
+        {
+            //Arrange
+            Guid? costumeID = null;
+
+            //Act
+            CostumeResponse costume_response = _costumeService.GetCostumeByCostumeID(costumeID);
+
+            //Assert
+            Assert.Null(costume_response);
+        }
+
+        [Fact]
+        public void GetCostumeByCostumeID_GetCostume()
+        {
+            //Arrange
+            CostumeAddRequest costumeAddRequest = new CostumeAddRequest()
+            {
+                CostumeName = "Batman",
+                Gender = GenderOptions.Male,
+                Age = 8,
+                Size = 32,
+                PurchasePrice = 250,
+            };
+
+            CostumeResponse costume_response_from_add = _costumeService.AddCostume(costumeAddRequest);
+
+            Guid costumeID_of_added = costume_response_from_add.CostumeID;
+
+            //Act
+            CostumeResponse? costume_response_from_ID = _costumeService.GetCostumeByCostumeID(costumeID_of_added);
+
+            //Assert
+            Assert.Equal(costume_response_from_add, costume_response_from_ID);
+        }
+
+        #endregion
+
+        #region GetAllSoldCostumes
+
+        [Fact]
+        public void GetAllSoldCostumes_EmptyList()
+        {
+            //Act
+            List<CostumeResponse> costume_responses = _costumeService.GetAllSoldCostumes();
+
+            //Assert
+            Assert.Empty(costume_responses);
+        }
+
+        [Fact]
+        public void GetAllSoldCostumes_ProperSoldCostumes()
+        {
+            //Arrange
+
+            CostumeAddRequest costume1 = new CostumeAddRequest()
+            {
+                CostumeName = "Supaman",
+                Gender = GenderOptions.Male,
+                Age = 8,
+                Size = 10,
+                PurchasePrice = 150.35
+            };
+            CostumeAddRequest costume2 = new CostumeAddRequest()
+            {
+                CostumeName = "Batuman",
+                Gender = GenderOptions.Male,
+                Age = 13,
+                Size = 20,
+                PurchasePrice = 180.56
+            };
+            CostumeAddRequest costume3 = new CostumeAddRequest()
+            {
+                CostumeName = "Flash",
+                Gender = GenderOptions.Male,
+                Age = 4,
+                Size = 2,
+                PurchasePrice = 89.99
+            };
+            
+            List<CostumeResponse> costumeResponses_from_add = new List<CostumeResponse>();
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume1));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume2));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume3));
+
+            foreach(CostumeResponse costume in costumeResponses_from_add)
+            {
+                _costumeService.SoldCostumeByCostumeID(costume.CostumeID);
+            }
+
+            //Act
+            List<CostumeResponse> costumes_from_getSold = _costumeService.GetAllSoldCostumes();
+
+            //Assert
+            foreach(CostumeResponse costume in costumeResponses_from_add)
+            {
+                Assert.Contains(costume, costumes_from_getSold);
+            }
+
+
+
+        }
+
+
+        #endregion
+
+        #region SoldCostume
+
+        [Fact]
+        public void SoldCostumeByCostumeID_NullID()
+        {
+            //Arrange
+            Guid? costumeID = null;
+            //Act
+            bool Response = _costumeService.SoldCostumeByCostumeID(costumeID);
+            //Assert
+            Assert.False(Response);
+        }
+
+        [Fact]
+        public void SoldCostumeByCostumeID_ProperCostumeID()
+        {
+            //Arrange
+            CostumeAddRequest costumeAddRequest = new CostumeAddRequest()
+            {
+                CostumeName = "Supaman",
+                Gender = GenderOptions.Male,
+                Age = 10,
+                Size = 8,
+                PurchasePrice = 130.34,
+            };
+            CostumeResponse costumeResponse_from_add = _costumeService.AddCostume(costumeAddRequest);
+
+            //Act
+            _costumeService.SoldCostumeByCostumeID(costumeResponse_from_add.CostumeID);
+
+            List<CostumeResponse> soldList = _costumeService.GetAllSoldCostumes();
+
+            //Assert
+            Assert.Contains(costumeResponse_from_add, soldList);
+            Assert.DoesNotContain(costumeResponse_from_add, _costumeService.GetAllCostumes());
+        }
+        #endregion
     }
 }

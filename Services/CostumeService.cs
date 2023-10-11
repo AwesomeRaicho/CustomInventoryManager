@@ -9,11 +9,13 @@ namespace Services
     {
         //private fields
         List<Costume> _costumes;
+        List<Costume> _soldCostumes;
 
         //constructor
         public CostumeService()
         {
-            _costumes = new List<Costume>();
+            _costumes = new List<Costume>(); 
+            _soldCostumes = new List<Costume>();
         }
 
 
@@ -39,21 +41,43 @@ namespace Services
         {
             return _costumes.Select(costume => costume.ToCostumeResponse()).ToList();
         }
+        public CostumeResponse? GetCostumeByCostumeID(Guid? costumeID)
+        {
+            if (costumeID == null) return null;
+
+            return _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID)?.ToCostumeResponse();
+        }
+
+        public List<CostumeResponse> GetAllSoldCostumes()
+        {
+            return _soldCostumes.Select(costume => costume.ToCostumeResponse()).ToList();
+        }
+
+        public bool SoldCostumeByCostumeID(Guid? costumeID)
+        {
+            if(costumeID == null) return false;
+
+            Costume? soldCostume = _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID);
+
+            if (soldCostume == null)
+            {
+                return false;
+            }
+            else
+            {
+                soldCostume.ExitDate = DateTime.Now;
+                _soldCostumes.Add(soldCostume);
+            }
+
+            _costumes.RemoveAll(costume => costume.CostumeID == costumeID);
+            return true;
+
+        }
 
         public bool DeleteCostume(Guid? costumeID)
         {
             throw new NotImplementedException();
         }
 
-
-        public CostumeResponse GetCostumeByCostumeID(Guid? costumeID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RemoveCostume(Guid? costumeID)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
