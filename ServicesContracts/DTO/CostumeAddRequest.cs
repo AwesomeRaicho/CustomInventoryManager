@@ -11,9 +11,9 @@ namespace ServiceContracts
         [Required(ErrorMessage = "Gender must be supplied")]
         public GenderOptions Gender { get; set; }
         [Required(ErrorMessage = "Size must be supplied")]
-        public int? Size { get; set; }
+        public string? Size { get; set; }
         [Required(ErrorMessage = "Age must be supplied")]
-        public int? Age { get; set; }
+        public string? Age { get; set; }
         [Required(ErrorMessage = "Purchace price must be supplied")]
         public double? PurchasePrice { get; set; }
 

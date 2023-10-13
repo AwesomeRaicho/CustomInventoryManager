@@ -79,5 +79,37 @@ namespace Services
             throw new NotImplementedException();
         }
 
+        public List<CostumeResponse> GetFilteredCostumes(string filterBy, string? searchString)
+        {
+            List<CostumeResponse> allCostumes = GetAllCostumes();
+            List<CostumeResponse> matchingCostumes = allCostumes;
+
+            if(string.IsNullOrEmpty(filterBy) || string.IsNullOrEmpty(searchString))
+                return matchingCostumes;
+
+            switch(filterBy)
+            {
+                case nameof(Costume.CostumeName):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.CostumeName)) ? temp.CostumeName.Contains(searchString, StringComparison.OrdinalIgnoreCase) : true).ToList();
+
+                    break;
+                case nameof(Costume.Gender):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Gender)) ? temp.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase) : true).ToList();
+
+                    break;
+                case nameof(Costume.Size):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Size)) ? temp.Size == searchString : true).ToList();
+
+                    break;
+                case nameof(Costume.Age):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Age)) ? temp.Age == searchString : true).ToList();
+
+                    break;
+
+                default: return matchingCostumes;
+            }
+
+            return matchingCostumes;
+        }
     }
 }

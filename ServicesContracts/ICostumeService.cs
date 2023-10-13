@@ -45,8 +45,15 @@ namespace ServiceContracts
         /// <returns>bool with true if  deleted successfully or false if unable to delete</returns>
         bool DeleteCostume(Guid? costumeID);
 
+        /// <summary>
+        /// Get list of filtered costumes
+        /// </summary>
+        /// <param name="filterBy">Category to filter</param>
+        /// <param name="searchString">string for pattern matching</param>
+        /// <returns>List of filtered by category</returns>
+        List<CostumeResponse> GetFilteredCostumes(string filterBy, string? searchString);
+
         //required Methods
-        // * filtered List
         // * sorted List
 
         //update costume will need a DTO

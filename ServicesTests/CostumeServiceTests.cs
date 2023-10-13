@@ -1,8 +1,9 @@
 using ServiceContracts;
 using ServiceContracts.Enums;
-
+using Entities;
 using Services;
 using Xunit.Sdk;
+using Xunit.Abstractions;
 
 namespace ServicesTests
 {
@@ -10,11 +11,13 @@ namespace ServicesTests
     {
         //private fields
         public readonly ICostumeService _costumeService;
+        public readonly ITestOutputHelper _testOutputHelper;
 
         //constructor 
-        public CostumeServiceTests()
+        public CostumeServiceTests(ITestOutputHelper testOutputHelper)
         {
             _costumeService = new CostumeService();
+            _testOutputHelper = testOutputHelper;
         }
 
 
@@ -26,7 +29,7 @@ namespace ServicesTests
         [Fact]
         public void AddCostume_NullCostume()
         {
-            
+
             //Assert
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -58,8 +61,8 @@ namespace ServicesTests
             CostumeAddRequest costume_add_request = new CostumeAddRequest()
             {
                 CostumeName = "Wonda Woman",
-                Age = 8,
-                Size = 8,
+                Age = "8",
+                Size = "8",
                 Gender = GenderOptions.Female,
                 PurchasePrice = 250.50
             };
@@ -70,6 +73,7 @@ namespace ServicesTests
             //Assert
             Assert.True(costume_response_from_add.CostumeID != Guid.Empty);
         }
+
 
         #endregion
 
@@ -95,36 +99,36 @@ namespace ServicesTests
             {
                 CostumeName = "WondaWuman",
                 Gender = GenderOptions.Female,
-                Size = 5,
-                Age=8,
+                Size = "5",
+                Age = "8",
                 PurchasePrice = 355.50,
             };
             CostumeAddRequest costume2 = new CostumeAddRequest()
             {
                 CostumeName = "SupaMa",
                 Gender = GenderOptions.Male,
-                Size = 7,
-                Age = 5,
+                Size = "7",
+                Age = "5",
                 PurchasePrice = 100.20,
             }; CostumeAddRequest costume3 = new CostumeAddRequest()
             {
                 CostumeName = "Baturuman",
                 Gender = GenderOptions.Male,
-                Size = 10,
-                Age = 13,
+                Size = "10",
+                Age = "13",
                 PurchasePrice = 130.30,
             };
 
             List<CostumeAddRequest> costumes_requests = new List<CostumeAddRequest>
-            { 
-                costume1, 
-                costume2, 
-                costume3 
+            {
+                costume1,
+                costume2,
+                costume3
             };
 
             List<CostumeResponse> costumes_from_add = new List<CostumeResponse>();
 
-            foreach(CostumeAddRequest costume_request in costumes_requests)
+            foreach (CostumeAddRequest costume_request in costumes_requests)
             {
                 costumes_from_add.Add(_costumeService.AddCostume(costume_request));
             }
@@ -133,7 +137,7 @@ namespace ServicesTests
             List<CostumeResponse> costumes_from_getall = _costumeService.GetAllCostumes();
 
             //Assert
-            foreach(CostumeResponse costume in costumes_from_add)
+            foreach (CostumeResponse costume in costumes_from_add)
             {
                 Assert.Contains(costume, costumes_from_getall);
             }
@@ -150,7 +154,7 @@ namespace ServicesTests
             Guid? costumeID = null;
 
             //Act
-            CostumeResponse costume_response = _costumeService.GetCostumeByCostumeID(costumeID);
+            CostumeResponse? costume_response = _costumeService.GetCostumeByCostumeID(costumeID);
 
             //Assert
             Assert.Null(costume_response);
@@ -164,8 +168,8 @@ namespace ServicesTests
             {
                 CostumeName = "Batman",
                 Gender = GenderOptions.Male,
-                Age = 8,
-                Size = 32,
+                Age = "8",
+                Size = "32",
                 PurchasePrice = 250,
             };
 
@@ -203,33 +207,33 @@ namespace ServicesTests
             {
                 CostumeName = "Supaman",
                 Gender = GenderOptions.Male,
-                Age = 8,
-                Size = 10,
+                Age = "8",
+                Size = "10",
                 PurchasePrice = 150.35
             };
             CostumeAddRequest costume2 = new CostumeAddRequest()
             {
                 CostumeName = "Batuman",
                 Gender = GenderOptions.Male,
-                Age = 13,
-                Size = 20,
+                Age = "13",
+                Size = "20",
                 PurchasePrice = 180.56
             };
             CostumeAddRequest costume3 = new CostumeAddRequest()
             {
                 CostumeName = "Flash",
                 Gender = GenderOptions.Male,
-                Age = 4,
-                Size = 2,
+                Age = "4",
+                Size = "2",
                 PurchasePrice = 89.99
             };
-            
+
             List<CostumeResponse> costumeResponses_from_add = new List<CostumeResponse>();
             costumeResponses_from_add.Add(_costumeService.AddCostume(costume1));
             costumeResponses_from_add.Add(_costumeService.AddCostume(costume2));
             costumeResponses_from_add.Add(_costumeService.AddCostume(costume3));
 
-            foreach(CostumeResponse costume in costumeResponses_from_add)
+            foreach (CostumeResponse costume in costumeResponses_from_add)
             {
                 _costumeService.SoldCostumeByCostumeID(costume.CostumeID);
             }
@@ -238,7 +242,7 @@ namespace ServicesTests
             List<CostumeResponse> costumes_from_getSold = _costumeService.GetAllSoldCostumes();
 
             //Assert
-            foreach(CostumeResponse costume in costumeResponses_from_add)
+            foreach (CostumeResponse costume in costumeResponses_from_add)
             {
                 Assert.Contains(costume, costumes_from_getSold);
             }
@@ -271,8 +275,8 @@ namespace ServicesTests
             {
                 CostumeName = "Supaman",
                 Gender = GenderOptions.Male,
-                Age = 10,
-                Size = 8,
+                Age = "10",
+                Size = "8",
                 PurchasePrice = 130.34,
             };
             CostumeResponse costumeResponse_from_add = _costumeService.AddCostume(costumeAddRequest);
@@ -287,5 +291,77 @@ namespace ServicesTests
             Assert.DoesNotContain(costumeResponse_from_add, _costumeService.GetAllCostumes());
         }
         #endregion
+
+        #region GetFilteredCostumes
+
+        [Fact]
+        public void GetFilteredCostumes_CorrectFiltering()
+        {
+            //Arrange
+            CostumeAddRequest costume1 = new CostumeAddRequest()
+            {
+                CostumeName = "Supaman",
+                Gender = GenderOptions.Male,
+                Age = "8",
+                Size = "10",
+                PurchasePrice = 150.35
+            };
+            CostumeAddRequest costume2 = new CostumeAddRequest()
+            {
+                CostumeName = "Batuman",
+                Gender = GenderOptions.Male,
+                Age = "13",
+                Size = "20",
+                PurchasePrice = 180.56
+            };
+            CostumeAddRequest costume3 = new CostumeAddRequest()
+            {
+                CostumeName = "Flash",
+                Gender = GenderOptions.Male,
+                Age = "4",
+                Size = "2",
+                PurchasePrice = 89.99
+            };
+
+            List<CostumeResponse> costumeResponses_from_add = new List<CostumeResponse>();
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume1));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume2));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume3));
+
+
+
+            //getting all person names that match
+            List<CostumeResponse> filtered_costumeResponses_from_add = costumeResponses_from_add.Where(temp => (!string.IsNullOrEmpty(temp.CostumeName)) ? temp.CostumeName.Contains("man", StringComparison.OrdinalIgnoreCase) : false).ToList();
+            _testOutputHelper.WriteLine("\n*** Expected ***");
+            foreach(CostumeResponse costume in filtered_costumeResponses_from_add)
+            {
+                _testOutputHelper.WriteLine(costume.CostumeName);
+                _testOutputHelper.WriteLine(costume.CostumeID.ToString());
+            }
+            //Act
+            List<CostumeResponse> costumeResponses_from_getFiltered = _costumeService.GetFilteredCostumes(nameof(Costume.CostumeName), "man");
+
+            _testOutputHelper.WriteLine("\n*** Actual ***");
+            foreach (CostumeResponse costume in costumeResponses_from_getFiltered)
+            {
+                _testOutputHelper.WriteLine(costume.CostumeName);
+                _testOutputHelper.WriteLine(costume.CostumeID.ToString());
+            }
+
+
+            //Assert
+
+            //check that 'Flash' is not in the list
+            Assert.DoesNotContain(costumeResponses_from_add[2], costumeResponses_from_getFiltered);
+
+            //checkes that names containing 'man' are on the list
+            foreach(CostumeResponse costume in filtered_costumeResponses_from_add)
+            {
+                Assert.Contains(costume, costumeResponses_from_getFiltered);
+            }
+        }
+
+        #endregion
+
     }
 }
