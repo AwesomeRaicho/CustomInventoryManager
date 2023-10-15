@@ -2,6 +2,8 @@
 using Entities;
 using ServiceContracts;
 using Services.Helpers;
+using ServicesContracts.DTO;
+using ServicesContracts.Enums;
 
 namespace Services
 {
@@ -74,10 +76,6 @@ namespace Services
 
         }
 
-        public bool DeleteCostume(Guid? costumeID)
-        {
-            throw new NotImplementedException();
-        }
 
         public List<CostumeResponse> GetFilteredCostumes(string filterBy, string? searchString)
         {
@@ -97,6 +95,7 @@ namespace Services
                     matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Gender)) ? temp.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase) : true).ToList();
 
                     break;
+
                 case nameof(Costume.Size):
                     matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Size)) ? temp.Size == searchString : true).ToList();
 
@@ -110,6 +109,62 @@ namespace Services
             }
 
             return matchingCostumes;
+        }
+        public bool DeleteCostume(Guid? costumeID)
+        {
+            if(costumeID == null) throw new ArgumentNullException(nameof(costumeID));
+
+            Costume? toRemove = _costumes.FirstOrDefault(temp => temp.CostumeID == costumeID);
+
+            if(toRemove == null) return false;
+
+            return  _costumes.Remove(toRemove);
+        }
+
+        public List<CostumeResponse> GetSortedCostumes(List<CostumeResponse> allCostumes, string orderBy, SortOrderOptions sortOrder)
+        {
+            if (string.IsNullOrEmpty(orderBy)) return allCostumes;
+
+            List<CostumeResponse> OrderedCostumes = (orderBy, sortOrder) switch
+            {
+                (nameof(Costume.CostumeName), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.CostumeName).ToList(),
+                (nameof(Costume.CostumeName), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.CostumeName).ToList(),
+                (nameof(Costume.Gender), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Gender).ToList(),
+                (nameof(Costume.Gender), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Gender).ToList(),
+                (nameof(Costume.Size), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Size).ToList(),
+                (nameof(Costume.Size), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Size).ToList(),
+                (nameof(Costume.Age), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Age).ToList(),
+                (nameof(Costume.Age), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Age).ToList(),
+                (nameof(Costume.EntryDate), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.EntryDate).ToList(),
+                (nameof(Costume.EntryDate), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.EntryDate).ToList(),
+                (nameof(Costume.ExitDate), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.ExitDate).ToList(),
+                (nameof(Costume.ExitDate), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.ExitDate).ToList(),
+                _ => allCostumes,
+            };
+
+            return OrderedCostumes;
+        }
+
+        public CostumeResponse UpdateCostume(CostumeUpdateRequest? costumeUpdateRequest)
+        {
+            if (costumeUpdateRequest == null) throw new ArgumentNullException(nameof(costumeUpdateRequest));
+
+            ValidationHelper.ModelValidation(costumeUpdateRequest);
+
+            Costume? costume = _costumes.FirstOrDefault(temp => temp.CostumeID == costumeUpdateRequest.CostumeID);
+
+            if (costume == null) throw new ArgumentException(nameof(costume.CostumeID));
+
+            costume.CostumeID = costumeUpdateRequest.CostumeID;
+            costume.CostumeName = costumeUpdateRequest.CostumeName;
+            costume.PurchasePrice = costumeUpdateRequest.PurchasePrice;
+            costume.EntryDate = costumeUpdateRequest.EntryDate;
+            costume.Age = costumeUpdateRequest.Age;
+            costume.Gender = costumeUpdateRequest.Gender.ToString();
+            costume.ExitDate = costumeUpdateRequest.ExitDate;
+            costume.Size = costumeUpdateRequest.Size;
+
+            return costume.ToCostumeResponse();
         }
     }
 }

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities;
+using ServiceContracts.Enums;
+using ServicesContracts.DTO;
+using ServicesContracts.Enums;
+
 
 namespace ServiceContracts
 {
@@ -36,6 +40,21 @@ namespace ServiceContracts
         public override int GetHashCode()
         {
             throw new NotImplementedException();
+        }
+
+        public CostumeUpdateRequest GetCostumeUpdateRequest()
+        {
+            return new CostumeUpdateRequest()
+            {
+                CostumeName = CostumeName,
+                Age = Age,
+                PurchasePrice = PurchasePrice,
+                Size = Size,
+                CostumeID = CostumeID,
+                Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+                EntryDate = EntryDate,
+                ExitDate = ExitDate,
+            };
         }
     }
 

@@ -4,6 +4,9 @@ using Entities;
 using Services;
 using Xunit.Sdk;
 using Xunit.Abstractions;
+using System.ComponentModel;
+using ServicesContracts.Enums;
+using ServicesContracts.DTO;
 
 namespace ServicesTests
 {
@@ -360,6 +363,173 @@ namespace ServicesTests
                 Assert.Contains(costume, costumeResponses_from_getFiltered);
             }
         }
+        #endregion
+
+        #region DeleteCostume
+
+        //Null ID param should return exception
+        [Fact]
+        public void DeleteCostume_NullID()
+        {
+            //Arrange
+            Guid? id = null;
+
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                //Act
+                bool response = _costumeService.DeleteCostume(id);
+
+            });
+        }
+
+
+        // Provided ID does not exist in the DB, should return false
+        [Fact]
+        public void DeleteCostume_IDNotInDB()
+        {
+            //Arrange
+            Guid? id = Guid.NewGuid();
+
+            //Act
+            bool response = _costumeService.DeleteCostume(id);
+
+            //Assert
+
+            Assert.False(response);
+        }
+
+
+        //Correctly delete entry from DB
+        [Fact]
+        public void DeleteCostume_DeletedCorrectly()
+        {
+            //Arrange
+            CostumeAddRequest costume_request = new CostumeAddRequest()
+            {
+                CostumeName = "supeman",
+                Gender = GenderOptions.Male,
+                Age = "10",
+                Size = "10",
+                PurchasePrice = 125.35
+            };
+
+            CostumeResponse costume_response = _costumeService.AddCostume(costume_request);
+
+            //Act
+            bool response = _costumeService.DeleteCostume(costume_response.CostumeID);
+
+            //Assert
+
+            Assert.True(response);
+        }
+        #endregion
+
+        #region GetSortedCostumes
+
+        [Fact]
+        public void GetSortedCostumes_CosrrectlySorted()
+        {
+            //Arrange
+            CostumeAddRequest costume0 = new CostumeAddRequest()
+            {
+                CostumeName = "Wondawoman",
+                Gender = GenderOptions.Female,
+                Age = "8",
+                Size = "10",
+                PurchasePrice = 333.33
+            };
+            CostumeAddRequest costume2 = new CostumeAddRequest()
+            {
+                CostumeName = "Batuman",
+                Gender = GenderOptions.Male,
+                Age = "13",
+                Size = "20",
+                PurchasePrice = 180.56
+            };
+            CostumeAddRequest costume1 = new CostumeAddRequest()
+            {
+                CostumeName = "Supaman",
+                Gender = GenderOptions.Male,
+                Age = "8",
+                Size = "10",
+                PurchasePrice = 150.35
+            };
+            CostumeAddRequest costume3 = new CostumeAddRequest()
+            {
+                CostumeName = "Flash",
+                Gender = GenderOptions.Male,
+                Age = "4",
+                Size = "2",
+                PurchasePrice = 89.99
+            };
+
+            List<CostumeResponse> costumeResponses_from_add = new List<CostumeResponse>();
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume0));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume1));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume2));
+            costumeResponses_from_add.Add(_costumeService.AddCostume(costume3));
+
+            List<CostumeResponse> costumeResponses_from_add_sorted = costumeResponses_from_add.OrderBy(temp => temp.CostumeName).ToList();
+
+            //Act
+            List<CostumeResponse> costumeResponses_from_getSort = _costumeService.GetSortedCostumes(costumeResponses_from_add, nameof(Costume.CostumeName), SortOrderOptions.ASC);
+
+            //Assert
+            for(int i = 0; i<costumeResponses_from_add.Count; i++)
+            {
+                Assert.Equal(costumeResponses_from_add_sorted[i], costumeResponses_from_getSort[i]);
+            }
+
+        }
+
+        #endregion
+
+        #region UpdateCostume
+
+        [Fact]
+        public void UpdateCostume_NullCostume()
+        {
+            //Arrange
+            CostumeUpdateRequest? costume_to_update = null;
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                //Act
+                _costumeService.UpdateCostume(costume_to_update);
+            });
+        }
+
+
+        [Fact]
+        public void UpdateCostume_ProperUpdate()
+        {
+            //Arrange
+            CostumeAddRequest costume = new CostumeAddRequest()
+            {
+                CostumeName = "Flash",
+                Gender = GenderOptions.Male,
+                Age = "4",
+                Size = "2",
+                PurchasePrice = 89.99
+            };
+
+            CostumeResponse costume_response = _costumeService.AddCostume(costume);
+
+            CostumeUpdateRequest costume_update = costume_response.GetCostumeUpdateRequest();
+            costume_update.CostumeName = "ReverseFlash";
+
+            //Act
+            _costumeService.UpdateCostume(costume_update);
+
+            //get costume from DB and verify if the new name is on it
+            CostumeResponse? costume_from_get = _costumeService.GetCostumeByCostumeID(costume_response.CostumeID);
+
+            //Assert
+            Assert.Equal("ReverseFlash", costume_from_get.CostumeName);
+        }
+
 
         #endregion
 
