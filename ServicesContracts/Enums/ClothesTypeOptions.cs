@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServicesContracts.Enums
 {
-    public enum GenderOptions
+    public enum ClothesTypeOptions
     {
-        Male, Female, Other
+        Vestido, Traje, Ropon, Tunica, Misc
     }
 }

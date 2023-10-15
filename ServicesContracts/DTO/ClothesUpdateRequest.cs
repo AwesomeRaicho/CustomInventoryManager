@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServicesContracts.Enums
+namespace ServicesContracts.DTO
 {
-    public enum GenderOptions
+    public class ClothesUpdateRequest
     {
-        Male, Female, Other
     }
 }

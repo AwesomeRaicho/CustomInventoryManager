@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServicesContracts.Enums
 {
-    public enum GenderOptions
+    public enum ThemeOptions
     {
-        Male, Female, Other
+        Baptism, Communion, Other
     }
 }
