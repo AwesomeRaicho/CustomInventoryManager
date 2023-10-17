@@ -427,7 +427,7 @@ namespace ServicesTests
         #region GetSortedCostumes
 
         [Fact]
-        public void GetSortedCostumes_CosrrectlySorted()
+        public void GetSortedCostumes_CorrectlySorted()
         {
             //Arrange
             CostumeAddRequest costume0 = new CostumeAddRequest()
@@ -524,7 +524,7 @@ namespace ServicesTests
 
             //get costume from DB and verify if the new name is on it
             CostumeResponse? costume_from_get = _costumeService.GetCostumeByCostumeID(costume_response.CostumeID);
-
+            
             //Assert
             Assert.Equal("ReverseFlash", costume_from_get.CostumeName);
         }

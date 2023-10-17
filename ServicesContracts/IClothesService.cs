@@ -64,7 +64,7 @@ namespace ServicesContracts
         /// sorts List provided by specified property
         /// </summary>
         /// <returns></returns>
-        List<ClothesResponse> GetSortedClothes(List<ClothesResponse>? allClothes, string sortBy, SortOrderOptions sortOrder);
+        List<ClothesResponse> GetSortedClothes(List<ClothesResponse> allClothes, string sortBy, SortOrderOptions sortOrder);
 
         /// <summary>
         /// update an existing Clothes in DB 

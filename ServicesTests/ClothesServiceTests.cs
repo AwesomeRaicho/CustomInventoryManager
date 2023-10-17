@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Services;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
-using NuGet.Frameworks;
+using Entities;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace ServicesTests
 {
@@ -15,11 +17,13 @@ namespace ServicesTests
     {
         //Private fields
         private readonly IClothesService _clothesService;
+        private readonly ITestOutputHelper _testOutputHelper;
 
         //contructor
-        public ClothesServiceTests()
+        public ClothesServiceTests(ITestOutputHelper testOutputHelper)
         {
             _clothesService = new ClothesService();
+            _testOutputHelper = testOutputHelper;
         }
 
         //Tests
@@ -413,7 +417,279 @@ namespace ServicesTests
 
 
         }
+        #endregion
 
+        #region GetFilteredClothes
+        //correctly filter by Gender
+        [Fact]
+        public void GetFilteredClothes_FilterByGender()
+        {
+            //Arrange 
+            ClothesAddRequest clothes_add_requerst1 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Vestido,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "003",
+                Size = "10",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst2 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Tunica,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Male,
+                Model = "3",
+                Size = "1",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst3 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+
+            List<ClothesResponse> clothes_responses_list_from_add = new List<ClothesResponse>();
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst1));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst2));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst3));
+
+            List<ClothesResponse> filtered_clothes_responses_from_add = clothes_responses_list_from_add.Where(temp => (!string.IsNullOrEmpty(temp.Gender)) ? temp.Gender.Equals("male", StringComparison.OrdinalIgnoreCase) : true).ToList();
+            _testOutputHelper.WriteLine("Expected");
+            foreach (ClothesResponse response in filtered_clothes_responses_from_add)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+            }
+            //Act
+            List<ClothesResponse> clothes_responses_from_getfiltered = _clothesService.GetFilteredClothes(nameof(Clothes.Gender), "Male");
+
+            
+
+            _testOutputHelper.WriteLine("Actual");
+            foreach(ClothesResponse response in clothes_responses_from_getfiltered)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+            }
+
+
+
+            //Assert
+            Assert.Contains(clothes_responses_list_from_add[1], clothes_responses_from_getfiltered);
+            Assert.DoesNotContain(clothes_responses_list_from_add[0], clothes_responses_from_getfiltered);
+            Assert.DoesNotContain(clothes_responses_list_from_add[2], clothes_responses_from_getfiltered);
+
+        }
+
+        //correctly filter by Model
+        [Fact]
+        public void GetFilteredClothes_filterByModel()
+        {
+            //Arrange 
+            ClothesAddRequest clothes_add_requerst1 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Vestido,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "003",
+                Size = "10",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst2 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Tunica,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Male,
+                Model = "3",
+                Size = "1",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst3 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+
+            List<ClothesResponse> clothes_responses_list_from_add = new List<ClothesResponse>();
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst1));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst2));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst3));
+
+            //Act
+            List<ClothesResponse> clothes_responses_from_getfiltered = _clothesService.GetFilteredClothes(nameof(Clothes.Model), "Suave");
+
+            //Assert
+            Assert.Contains(clothes_responses_list_from_add[2], clothes_responses_from_getfiltered);
+            Assert.DoesNotContain(clothes_responses_list_from_add[0], clothes_responses_from_getfiltered);
+            Assert.DoesNotContain(clothes_responses_list_from_add[1], clothes_responses_from_getfiltered);
+
+        }
+
+        //correctly get all Clothes if to filterstring is provided
+        [Fact]
+        public void GetFilteredClothes_EmptySearchString()
+        {
+            //Arrange 
+            ClothesAddRequest clothes_add_requerst1 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Vestido,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "003",
+                Size = "10",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst2 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Tunica,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Male,
+                Model = "3",
+                Size = "1",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst3 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+
+            List<ClothesResponse> clothes_responses_list_from_add = new List<ClothesResponse>();
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst1));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst2));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst3));
+
+            
+
+            //Act
+            List<ClothesResponse> clothes_responses_from_getfiltered = _clothesService.GetFilteredClothes(nameof(Clothes.Gender), "");
+            
+
+            //Assert
+            foreach (ClothesResponse clothes in clothes_responses_list_from_add)
+            {
+                Assert.Contains(clothes, clothes_responses_from_getfiltered);
+            }
+
+        }
+        #endregion
+
+        #region GetSortedClothes
+
+        //should get asending model order
+        [Fact]
+        public void GetSortedClothes_SortASC()
+        {
+            //Arrange 
+            ClothesAddRequest clothes_add_requerst1 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Vestido,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "003",
+                Size = "10",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst2 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Tunica,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Male,
+                Model = "3",
+                Size = "1",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst3 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+
+            List<ClothesResponse> clothes_responses_list_from_add = new List<ClothesResponse>();
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst1));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst2));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst3));
+
+            List<ClothesResponse> sorted_clothes_responses_list_from_add = clothes_responses_list_from_add.OrderBy(temp => temp.Model).ToList();
+
+            //Act 
+            List<ClothesResponse> sorted_clothes_from_GetSorted = _clothesService.GetSortedClothes(clothes_responses_list_from_add, nameof(Clothes.Model), SortOrderOptions.ASC);
+
+
+            //Assert
+            for(int i = 0; i< sorted_clothes_responses_list_from_add.Count; i++)
+            {
+                Assert.Equal(sorted_clothes_responses_list_from_add[i], sorted_clothes_from_GetSorted[i]);
+            }
+
+        }
+
+        //should get desending order of purchase prices
+        [Fact]
+        public void GetSortedClothes_SortDESC()
+        {
+            //Arrange 
+            ClothesAddRequest clothes_add_requerst1 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Vestido,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "003",
+                Size = "10",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst2 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Tunica,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Male,
+                Model = "3",
+                Size = "1",
+                PurchasePrice = 450.50
+            };
+            ClothesAddRequest clothes_add_requerst3 = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+
+            List<ClothesResponse> clothes_responses_list_from_add = new List<ClothesResponse>();
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst1));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst2));
+            clothes_responses_list_from_add.Add(_clothesService.AddClothes(clothes_add_requerst3));
+
+            List<ClothesResponse> sorted_clothes_responses_list_from_add = clothes_responses_list_from_add.OrderByDescending(temp => temp.PurchasePrice).ToList();
+
+            //Act 
+            List<ClothesResponse> sorted_clothes_from_GetSorted = _clothesService.GetSortedClothes(clothes_responses_list_from_add, nameof(Clothes.PurchasePrice), SortOrderOptions.DESC);
+
+
+            //Assert
+            for (int i = 0; i < sorted_clothes_responses_list_from_add.Count; i++)
+            {
+                Assert.Equal(sorted_clothes_responses_list_from_add[i], sorted_clothes_from_GetSorted[i]);
+            }
+
+        }
         #endregion
 
     }//end of class

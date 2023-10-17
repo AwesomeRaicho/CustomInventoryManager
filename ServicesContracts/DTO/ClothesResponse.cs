@@ -19,6 +19,10 @@ namespace ServicesContracts.DTO
         public DateTime? EntryDate { get; set; }
         public DateTime? ExitDate { get; set; }
 
+        public override string ToString()
+        {
+            return $"ID: {ClothesID}, Theme: {Theme}, Clothes Type: {ClothesType}, Gender: {Gender}";
+        }
 
         /// <summary>
         /// makes sure to compare equiality by value andf not by reference
@@ -32,15 +36,14 @@ namespace ServicesContracts.DTO
 
             ClothesResponse other = (ClothesResponse)obj;
 
-            return 
-                ClothesID == ClothesID && 
-                Theme == other.Theme && 
-                Model == other.Model && 
-                Gender == other.Gender && 
-                Size == other.Size && 
-                PurchasePrice == other.PurchasePrice && 
-                EntryDate == other.EntryDate && 
-                ExitDate == other.ExitDate;
+            return
+                ClothesID == ClothesID &&
+                Theme == other.Theme &&
+                Model == other.Model &&
+                Gender == other.Gender &&
+                Size == other.Size &&
+                PurchasePrice == other.PurchasePrice &&
+                EntryDate == other.EntryDate;
         }
 
         public override int GetHashCode()
@@ -56,6 +59,14 @@ namespace ServicesContracts.DTO
             return new ClothesResponse
             {
                 ClothesID = clothes.ClothesID,
+                Theme = clothes.Theme,
+                Model = clothes.Model,
+                Gender = clothes.Gender,
+                Size = clothes.Size,
+                PurchasePrice = clothes.PurchasePrice,
+                EntryDate = clothes.EntryDate,
+                ClothesType = clothes.ClothesType,
+                ExitDate = clothes.ExitDate,
             };
         }
     }
