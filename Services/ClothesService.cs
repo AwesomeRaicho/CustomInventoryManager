@@ -159,7 +159,23 @@ namespace Services
 
         public ClothesResponse UpdateClothes(ClothesUpdateRequest? clothesUpdateRequest)
         {
-            throw new NotImplementedException();
+            if(clothesUpdateRequest == null) throw new ArgumentNullException(nameof(clothesUpdateRequest));
+
+            Clothes? clothesResponse = _clothes.FirstOrDefault(temp => temp.ClothesID == clothesUpdateRequest.ClothesID);
+
+            if(clothesResponse == null) throw new ArgumentNullException($"ClothesID does not have a match");
+
+            clothesResponse.ClothesID = clothesUpdateRequest.ClothesID;
+            clothesResponse.Model = clothesUpdateRequest.Model;
+            clothesResponse.ClothesType = clothesUpdateRequest.ClothesType;
+            clothesResponse.Gender = clothesUpdateRequest.Gender;
+            clothesResponse.EntryDate = clothesUpdateRequest.EntryDate;
+            clothesResponse.PurchasePrice = clothesUpdateRequest.PurchasePrice;
+            clothesResponse.ExitDate = clothesUpdateRequest.ExitDate;
+            clothesResponse.Size = clothesUpdateRequest.Size;
+            clothesResponse.Theme = clothesUpdateRequest.Theme;
+
+            return clothesResponse.ToClothesResponse();
         }
     }
 }

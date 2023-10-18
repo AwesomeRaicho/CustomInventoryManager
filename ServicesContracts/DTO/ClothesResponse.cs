@@ -24,6 +24,22 @@ namespace ServicesContracts.DTO
             return $"ID: {ClothesID}, Theme: {Theme}, Clothes Type: {ClothesType}, Gender: {Gender}";
         }
 
+        public ClothesUpdateRequest ToClothesUpdateRequest()
+        {
+            return new ClothesUpdateRequest()
+            {
+                ClothesID = ClothesID,
+                Theme = Theme,
+                Model = Model,
+                Gender = Gender,
+                Size = Size,
+                PurchasePrice = PurchasePrice,
+                EntryDate = EntryDate,
+                ExitDate = ExitDate,
+
+            };
+        }
+
         /// <summary>
         /// makes sure to compare equiality by value andf not by reference
         /// </summary>

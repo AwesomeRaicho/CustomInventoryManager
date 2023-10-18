@@ -692,5 +692,52 @@ namespace ServicesTests
         }
         #endregion
 
+
+        #region ClothesUpdateRequest
+
+        //should get updates
+        [Fact]
+        public void ClothesUpdateRequest_ProperUpdatingOfName()
+        {
+            //Arrange
+            ClothesAddRequest clothes_add_requerst = new ClothesAddRequest()
+            {
+                ClothesType = ClothesTypeOptions.Misc,
+                Theme = ThemeOptions.Baptism,
+                Gender = GenderOptions.Female,
+                Model = "Suave",
+                Size = "16",
+                PurchasePrice = 450.50
+            };
+            ClothesResponse clothes_response_from_add = _clothesService.AddClothes(clothes_add_requerst);
+
+            ClothesUpdateRequest clothes_update_response = clothes_response_from_add.ToClothesUpdateRequest();
+            clothes_update_response.ClothesType = ClothesTypeOptions.Ropon.ToString();
+            
+            //Act
+            ClothesResponse clothes_response_from_update = _clothesService.UpdateClothes(clothes_update_response);
+
+            ClothesResponse? clothes_from_get = _clothesService.GetClothesByClothesID(clothes_response_from_add.ClothesID);
+
+            //Assert
+            Assert.Equal(clothes_update_response.ClothesType, clothes_from_get.ClothesType);
+
+        }
+
+        // should throw argumentnullexception if object is null
+        [Fact]
+        public void ClothesUpdateRequest_NullUpdateRequest()
+        {
+            //Arrange
+            ClothesUpdateRequest? clothesUpdateRequest = null;
+
+            //Arrange
+            Assert.Throws<ArgumentNullException>(()=>
+            {
+                //Act
+                _clothesService.UpdateClothes(clothesUpdateRequest);
+            });
+        }
+        #endregion
     }//end of class
 }//end of namespace
