@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServicesContracts.Enums
 {
-    public enum ClothesTypeOptions
+    public enum ProductTypeOptions
     {
-        Vestido, Traje, Ropon, Tunica, Zapatos,  Misc
+        Candles, Crowns, Arras, Bow, Underwear, Leotards, Valerina, Misc
     }
 }

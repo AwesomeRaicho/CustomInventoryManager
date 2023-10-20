@@ -692,7 +692,6 @@ namespace ServicesTests
         }
         #endregion
 
-
         #region ClothesUpdateRequest
 
         //should get updates
@@ -739,5 +738,6 @@ namespace ServicesTests
             });
         }
         #endregion
+
     }//end of class
 }//end of namespace

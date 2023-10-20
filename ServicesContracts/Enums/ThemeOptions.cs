@@ -8,6 +8,6 @@ namespace ServicesContracts.Enums
 {
     public enum ThemeOptions
     {
-        Baptism, Communion, Other
+        Baptism, Communion, Wedding, XV, Underware, Other
     }
 }
