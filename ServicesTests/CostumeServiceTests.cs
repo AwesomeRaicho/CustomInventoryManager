@@ -524,9 +524,17 @@ namespace ServicesTests
 
             //get costume from DB and verify if the new name is on it
             CostumeResponse? costume_from_get = _costumeService.GetCostumeByCostumeID(costume_response.CostumeID);
-            
-            //Assert
-            Assert.Equal("ReverseFlash", costume_from_get.CostumeName);
+
+            // Assert
+            if (costume_from_get != null)
+            {
+                Assert.Equal("ReverseFlash", costume_from_get.CostumeName);
+            }
+            else
+            {
+                // Handle the case where the costume is null, for example:
+                Assert.True(false, "The costume returned by _costumeService.GetCostumeByCostumeID is null.");
+            }
         }
 
 

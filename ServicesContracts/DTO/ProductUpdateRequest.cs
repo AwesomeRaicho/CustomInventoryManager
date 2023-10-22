@@ -25,5 +25,11 @@ namespace ServicesContracts.DTO
         public DateTime? EntryDate { get; set; }
         public DateTime? ExitDate { get; set; }
 
+        public override string ToString()
+        {
+            return $"Type:{ProductType}, Desc:{ProductDescription}, color:{Color}, Theme:{Theme}, Gender:{Gender}, Size:{Size}, Price:{PurchasePrice}";
+            
+        }
+
     }
 }

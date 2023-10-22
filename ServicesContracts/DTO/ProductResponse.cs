@@ -21,6 +21,11 @@ namespace ServicesContracts.DTO
         public DateTime? EntryDate { get; set; }
         public DateTime? ExitTime { get; set; }
 
+        public override string ToString()
+        {
+            return $"Type:{ProductType}, Desc:{ProductDescription}, color:{Color}, Theme:{Theme}, Gender:{Gender}, Size:{Size}, Price {PurchasePrice}";
+        }
+
         public ProductUpdateRequest ToProductUpdateRequest()
         {
             return new ProductUpdateRequest()
@@ -28,10 +33,10 @@ namespace ServicesContracts.DTO
                 ProductID = ProductID,
                 Color = Color,
                 ProductDescription = ProductDescription,
-                ProductType = (ProductTypeOptions)Enum.Parse(typeof(ProductTypeOptions), ProductType, true),
-                Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+                ProductType = Enum.TryParse(this.ProductType, true, out ProductTypeOptions type) ? type : throw new ArgumentException("product type on pruduct update request is not correct"),
+                Gender = Enum.TryParse(this.Gender, true, out GenderOptions gender) ? gender : null,
                 Size = Size,
-                Theme = (ThemeOptions)Enum.Parse(typeof(ThemeOptions), Theme, true),
+                Theme = Enum.TryParse(this.Theme, true, out ThemeOptions theme) ? theme : null,
                 PurchasePrice = PurchasePrice,
                 EntryDate = EntryDate,
                 ExitDate = ExitTime,
@@ -43,15 +48,17 @@ namespace ServicesContracts.DTO
             if (obj == null) return false;
             if(obj.GetType() != typeof(ProductResponse)) return false;
 
+            ProductResponse other = (ProductResponse)obj;
+
             return
-                ProductID == ProductID &&
-                ProductType == ProductType &&
-                ProductDescription == ProductDescription &&
-                Color == Color &&
-                Theme == Theme &&
-                Gender == Gender &&
-                Size == Size &&
-                EntryDate == EntryDate;
+                ProductID == other.ProductID &&
+                ProductType == other.ProductType &&
+                ProductDescription == other.ProductDescription &&
+                Color == other.Color &&
+                Theme == other.Theme &&
+                Gender == other.Gender &&
+                Size == other.Size &&
+                EntryDate == other.EntryDate;
         }
 
         public override int GetHashCode()
@@ -73,6 +80,7 @@ namespace ServicesContracts.DTO
                 Theme = product.Theme,
                 Gender = product.Gender,
                 Size = product.Size,
+                PurchasePrice = product.PurchasePrice,
                 EntryDate = product.EntryDate,
                 ExitTime = product.ExitDate,                
             };

@@ -50,7 +50,7 @@ namespace ServiceContracts
                 PurchasePrice = PurchasePrice,
                 Size = Size,
                 CostumeID = CostumeID,
-                Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+                Gender = Enum.TryParse(this.Gender, true, out GenderOptions gender) ? gender : throw new ArgumentException("Incorrect gender for costume update request"),
                 EntryDate = EntryDate,
                 ExitDate = ExitDate,
             };

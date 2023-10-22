@@ -132,7 +132,7 @@ namespace ServicesTests
             ClothesResponse? clothes_response_from_add = _clothesService.AddClothes(clothes_add_requerst);
             Guid? clothesID = clothes_response_from_add.ClothesID;
             //Act
-            ClothesResponse clothes_responmse_from_get = _clothesService.GetClothesByClothesID(clothesID);
+            ClothesResponse? clothes_responmse_from_get = _clothesService.GetClothesByClothesID(clothesID);
 
             //Assert
             Assert.Equal(clothes_response_from_add, clothes_responmse_from_get);
@@ -719,7 +719,15 @@ namespace ServicesTests
             ClothesResponse? clothes_from_get = _clothesService.GetClothesByClothesID(clothes_response_from_add.ClothesID);
 
             //Assert
-            Assert.Equal(clothes_update_response.ClothesType, clothes_from_get.ClothesType);
+            if(clothes_from_get != null)
+            {
+                Assert.Equal(clothes_update_response.ClothesType, clothes_from_get.ClothesType);
+
+            }
+            else
+            {
+                Assert.True(false, "GetClothesByClothesID() is returning null in the test");
+            }
 
         }
 

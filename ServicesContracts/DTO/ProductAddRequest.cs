@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServicesContracts.Enums;
+using Entities;
 
 namespace ServicesContracts.DTO
 {
@@ -20,5 +21,20 @@ namespace ServicesContracts.DTO
         public string? Size { get; set; }
         [Required(ErrorMessage = "Must add purchase price")]
         public double? PurchasePrice { get; set; }
+
+        public Product ToProduct()
+        {
+            return new Product()
+            {
+                ProductType = ProductType.ToString(),
+                ProductDescription = ProductDescription,
+                Color = Color,  
+                Theme = Theme.ToString(),
+                Gender = Gender.ToString(),
+                Size = Size,
+                PurchasePrice = PurchasePrice
+            };
+        }
+
     }
 }

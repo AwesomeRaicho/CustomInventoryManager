@@ -8,6 +8,8 @@ using Services;
 using ServicesContracts;
 using ServicesContracts.Enums;
 using Entities;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace ServicesTests
 {
@@ -15,12 +17,13 @@ namespace ServicesTests
     {
         //private fields
         private readonly IProductsServices _productsService;
-
+        private readonly ITestOutputHelper _testOutputHelper;
 
         //constructor
-        public ProductServiceTests()
+        public ProductServiceTests(ITestOutputHelper testOutputHelper)
         {
             _productsService = new ProductService();
+            _testOutputHelper = testOutputHelper;
         }
 
         //tests
@@ -51,7 +54,7 @@ namespace ServicesTests
 
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 //Act
                 _productsService.AddProduct(request);
@@ -404,16 +407,34 @@ namespace ServicesTests
                 response_from_add.Add(_productsService.AddProduct(request));
             }
 
+            List<ProductResponse> expected_filter = response_from_add.Where(temp => (!string.IsNullOrEmpty(temp.ProductType))? temp.ProductType.Contains("Bo", StringComparison.OrdinalIgnoreCase) : true).ToList();
+
+            _testOutputHelper.WriteLine("Expected");
+            foreach (ProductResponse response in expected_filter)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+            }
 
 
 
             //Act
-            List<ProductResponse> response_from_Getfiltered = _productsService.GetFilteredProduct(nameof(Product.ProductType), "Bo");
+            List<ProductResponse> response_from_Getfiltered = _productsService.GetFilteredProduct(nameof(Product.ProductType), "bo");
+
+            _testOutputHelper.WriteLine("Actual Return: ");
+
+            foreach(ProductResponse response in response_from_Getfiltered)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+
+            }
+
 
             //Assert
+            Assert.DoesNotContain(response_from_add[2], response_from_Getfiltered);
             Assert.Contains(response_from_add[0], response_from_Getfiltered);
             Assert.Contains(response_from_add[1], response_from_Getfiltered);
-            Assert.DoesNotContain(response_from_add[2], response_from_Getfiltered);
+
+
 
         }
 
@@ -555,17 +576,22 @@ namespace ServicesTests
                 Theme = ThemeOptions.Wedding,
             };
 
+
             ProductResponse response_from_add = _productsService.AddProduct(request);
+            _testOutputHelper.WriteLine(response_from_add.ToString());
 
             ProductUpdateRequest productUpdateRequest = response_from_add.ToProductUpdateRequest();
 
             productUpdateRequest.Color = "Red";
             productUpdateRequest.ProductDescription = "";
+            _testOutputHelper.WriteLine(productUpdateRequest.ToString());
 
             //Act
             ProductResponse product_response_from_update = _productsService.UpdateProduct(productUpdateRequest);
 
             //Assert
+            _testOutputHelper.WriteLine($"{product_response_from_update.Color}");
+
             Assert.Equal("Red", product_response_from_update.Color);
             Assert.Equal("", product_response_from_update.ProductDescription);
         }
