@@ -9,6 +9,7 @@
       "CustomStoreDB/1.0.0": {
         "dependencies": {
           "Services": "1.0.0",
+          "ServicesContracts": "1.0.0",
           "ServicesTests": "1.0.0"
         },
         "runtime": {

@@ -6079,6 +6079,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Services >= 1.0.0",
+      "ServicesContracts >= 1.0.0",
       "ServicesTests >= 1.0.0"
     ]
   },
@@ -6115,6 +6116,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+            "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj": {
+              "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesContracts\\ServicesContracts.csproj"
+            },
             "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj": {
               "projectPath": "C:\\Users\\users\\Documents\\Programing\\C#\\ASP\\CustomStoreDB\\ServicesTests\\ServicesTests.csproj"
             },

@@ -119,3 +119,5 @@ C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\Entities.pdb
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\ServicesContracts.pdb
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\obj\Debug\net6.0\CustomStoreDB.csproj.CopyComplete
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\obj\Debug\net6.0\CustomStoreDB.RazorAssemblyInfo.cache
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\obj\Debug\net6.0\CustomStoreDB.RazorAssemblyInfo.cs

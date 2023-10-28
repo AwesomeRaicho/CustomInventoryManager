@@ -1,5 +1,6 @@
 ﻿
 using Entities;
+using Microsoft.VisualBasic.FileIO;
 using ServiceContracts;
 using Services.Helpers;
 using ServicesContracts.DTO;
@@ -14,10 +15,61 @@ namespace Services
         List<Costume> _soldCostumes;
 
         //constructor
-        public CostumeService()
+        public CostumeService(bool init = true)
         {
             _costumes = new List<Costume>(); 
             _soldCostumes = new List<Costume>();
+
+            if (init)
+            {
+                List<CostumeAddRequest> requests1 = new List<CostumeAddRequest>();
+                CostumeAddRequest request1 = new CostumeAddRequest()
+                {
+                    CostumeName = "wonda Woman",
+                    Gender = GenderOptions.Female,
+                    Age = "8",
+                    Size = "8",
+                    PurchasePrice = 150.00,
+                };
+                CostumeAddRequest request2 = new CostumeAddRequest()
+                {
+                    CostumeName = "Batman",
+                    Gender = GenderOptions.Male,
+                    Age = "10",
+                    Size = "10",
+                    PurchasePrice = 200.00,
+                };
+                CostumeAddRequest request3 = new CostumeAddRequest()
+                {
+                    CostumeName = "Supaman",
+                    Gender = GenderOptions.Male,
+                    Age = "13",
+                    Size = "16",
+                    PurchasePrice = 89.99,
+                };
+                CostumeAddRequest request4 = new CostumeAddRequest()
+                {
+                    CostumeName = "Super Girl",
+                    Gender = GenderOptions.Female,
+                    Age = "10",
+                    Size = "10",
+                    PurchasePrice = 122.22,
+                };
+                CostumeAddRequest request5 = new CostumeAddRequest()
+                {
+                    CostumeName = "Flash",
+                    Gender = GenderOptions.Male,
+                    Age = "15",
+                    Size = "15",
+                    PurchasePrice = 175.00,
+                };
+
+                AddCostume(request1);
+                AddCostume(request2);
+                AddCostume(request3);
+                AddCostume(request4);
+                AddCostume(request5);
+            }
         }
 
 
