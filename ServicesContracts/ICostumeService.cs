@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
 
-namespace ServiceContracts
+namespace ServicesContracts
 {
     public interface ICostumeService
     {

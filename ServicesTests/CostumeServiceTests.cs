@@ -1,4 +1,4 @@
-using ServiceContracts;
+using ServicesContracts;
 using Entities;
 using Services;
 using Xunit.Sdk;

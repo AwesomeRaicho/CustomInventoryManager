@@ -1,7 +1,7 @@
 ﻿
 using Entities;
 using Microsoft.VisualBasic.FileIO;
-using ServiceContracts;
+using ServicesContracts;
 using Services.Helpers;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
@@ -183,10 +183,10 @@ namespace Services
                 (nameof(Costume.CostumeName), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.CostumeName).ToList(),
                 (nameof(Costume.Gender), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Gender).ToList(),
                 (nameof(Costume.Gender), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Gender).ToList(),
-                (nameof(Costume.Size), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Size).ToList(),
-                (nameof(Costume.Size), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Size).ToList(),
-                (nameof(Costume.Age), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.Age).ToList(),
-                (nameof(Costume.Age), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.Age).ToList(),
+                (nameof(Costume.Size), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => int.TryParse(temp.Size, out var size) ? size : int.MaxValue).ToList(),
+                (nameof(Costume.Size), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => int.TryParse(temp.Size, out var size) ? size : int.MaxValue).ToList(),
+                (nameof(Costume.Age), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => int.TryParse(temp.Age, out var age) ? age : int.MaxValue).ToList(),
+                (nameof(Costume.Age), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => int.TryParse(temp.Age, out var age) ? age : int.MaxValue).ToList(),
                 (nameof(Costume.EntryDate), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.EntryDate).ToList(),
                 (nameof(Costume.EntryDate), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.EntryDate).ToList(),
                 (nameof(Costume.ExitDate), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.ExitDate).ToList(),

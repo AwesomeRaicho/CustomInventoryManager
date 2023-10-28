@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ServiceContracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Services;
-using System.Security.Cryptography.X509Certificates;
+using ServicesContracts;
+using ServicesContracts.Enums;
 
 namespace CustomStoreDB.Controllers
 {
@@ -17,12 +18,31 @@ namespace CustomStoreDB.Controllers
         }
 
         [Route("/")]
-        [Route("/Costumes")]
-        public IActionResult Costumes()
+        [Route("Costumes")]
+        public IActionResult Costumes(string filterBy, string? searchString, string orderBy = nameof(CostumeResponse.CostumeName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
 
+            ViewBag.CurrentFilterBy = filterBy;
+            ViewBag.CurrentSearchString = searchString;
+            ViewBag.CurrentOrderBy = orderBy.ToString();
+            ViewBag.CurrentSortOrder = sortOrder.ToString();
 
-            return View();
+
+            ViewBag.SearchFields = new Dictionary<string, string>()
+            {
+                {nameof(CostumeResponse.CostumeName), "Costume Name" },
+                {nameof(CostumeResponse.Gender), "Gender" },
+                {nameof(CostumeResponse.Size), "Size" },
+                {nameof(CostumeResponse.Age), "Age" },
+
+            };
+
+            List<CostumeResponse> costumes = _costumeService.GetFilteredCostumes(filterBy, searchString);
+
+            //sort 
+            List<CostumeResponse> sortedCostumes = _costumeService.GetSortedCostumes(costumes, orderBy, sortOrder);
+
+            return View(sortedCostumes);
         }
     }
 }

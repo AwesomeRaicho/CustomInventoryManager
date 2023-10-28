@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using ServicesContracts.Enums;
 
-namespace ServiceContracts
+namespace ServicesContracts
 {
     public class CostumeAddRequest
     {

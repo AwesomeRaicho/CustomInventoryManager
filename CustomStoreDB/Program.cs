@@ -1,6 +1,5 @@
-using ServiceContracts;
-using Services;
 using ServicesContracts;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
