@@ -3,10 +3,11 @@ using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IClothesService, ClothesService>();
-builder.Services.AddScoped<ICostumeService, CostumeService>();
-builder.Services.AddScoped<IProductsServices, ProductService>();
+builder.Services.AddSingleton<IClothesService, ClothesService>();
+builder.Services.AddSingleton<ICostumeService, CostumeService>();
+builder.Services.AddSingleton<IProductsServices, ProductService>();
 
 var app = builder.Build();
 

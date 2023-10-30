@@ -22,7 +22,6 @@ namespace Services
 
             if (init)
             {
-                List<CostumeAddRequest> requests1 = new List<CostumeAddRequest>();
                 CostumeAddRequest request1 = new CostumeAddRequest()
                 {
                     CostumeName = "wonda Woman",

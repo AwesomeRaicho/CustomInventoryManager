@@ -1,0 +1,65 @@
+﻿
+@{
+}
+
+
+<form action="~/costumes/create" method="post">
+    <div>
+        <label for="CostumeName">Costume Name</label>
+        <input type="text" name="CostumeName" id="CostumeName"/>
+    </div>
+
+    <div>
+        <label for="Gender">Gender</label>  
+        
+        <input type="radio" name="Gender" id="Male" value="Male">
+        <label for="Male">Male</label>
+
+        <input type="radio" name="Gender" id="Female" value="Female">
+        <label for="Female">Female</label>
+            
+            
+        <input type="radio" name="Gender" id="Other" value="Other">
+        <label for="Other">Other</label>
+    </div>
+    
+    <div>
+        <label for="Size">Size</label>
+        <select name="Size" id="Size">
+            @for(int i = 1; i <= 30; i++)
+            {
+                <option value="@(i)">@(i)</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="Age">Age</label>
+        <select name="Age" id="Age">
+            @for(int i = 1; i <= 30; i++)
+            {
+                <option value="@(i)">@(i)</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="PurchasePrice">Purchase Price</label>
+        <input type="number" step="0.01" id="PurchasePrice" name="PurchasePrice"/>
+    </div>
+
+    <button type="submit">Create</button>
+
+</form>
+
+@if(ViewBag.Errors !=null)
+{
+    <div class="text-red ml">
+        <ul>
+            @foreach(string error in ViewBag.Errors)
+            {
+                <li class="ml">@error</li>
+            }
+        </ul>
+    </div>
+}

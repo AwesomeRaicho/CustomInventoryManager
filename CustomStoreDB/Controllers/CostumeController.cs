@@ -44,5 +44,32 @@ namespace CustomStoreDB.Controllers
 
             return View(sortedCostumes);
         }
+
+        [Route("costumes/create")]
+        [HttpGet]
+        public IActionResult CreateCostume()
+        {
+
+            return View();
+        }
+
+        [Route("costumes/create")]
+        [HttpPost]
+        public IActionResult CreateCostume(CostumeAddRequest costumeAddRequest)
+        {
+
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                
+                return View();
+
+
+            }
+
+            _costumeService.AddCostume(costumeAddRequest);
+
+            return RedirectToAction("Costumes", "Costume");
+        }
     }
 }
