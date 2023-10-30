@@ -9,6 +9,7 @@
     string sortOrder = ViewBag.CurrentSortOrder;
     string columnName = ViewBag.ColumnName;
     string displayName = ViewBag.DisplayName;
+    string route = ViewBag.Route;
 
     string oppositeSortOrder = (sortOrder == SortOrderOptions.ASC.ToString())
     ? SortOrderOptions.DESC.ToString()
@@ -17,6 +18,6 @@
 }
 
 <th>
-    <a href="~/costumes?filterBy=@filterBy&searchString=@searchString&orderBy=@columnName&sortOrder=@oppositeSortOrder">@displayName</a>
+    <a href="~/@(route)?filterBy=@(filterBy)&searchString=@(searchString)&orderBy=@(columnName)&sortOrder=@(oppositeSortOrder)">@(displayName)</a>
 </th>
 

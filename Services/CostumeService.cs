@@ -157,6 +157,21 @@ namespace Services
 
                     break;
 
+                case nameof(Costume.PurchasePrice):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Size)) ? temp.Size == searchString : true).ToList();
+
+                    break;
+
+                case nameof(Costume.EntryDate):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Size)) ? temp.Size == searchString : true).ToList();
+
+                    break;
+
+                case nameof(Costume.ExitDate):
+                    matchingCostumes = allCostumes.Where(temp => (!string.IsNullOrEmpty(temp.Size)) ? temp.Size == searchString : true).ToList();
+
+                    break;
+
                 default: return matchingCostumes;
             }
 
@@ -191,6 +206,9 @@ namespace Services
                 (nameof(Costume.EntryDate), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.EntryDate).ToList(),
                 (nameof(Costume.ExitDate), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.ExitDate).ToList(),
                 (nameof(Costume.ExitDate), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.ExitDate).ToList(),
+                (nameof(Costume.PurchasePrice), SortOrderOptions.ASC) => allCostumes.OrderBy(temp => temp.PurchasePrice).ToList(),
+                (nameof(Costume.PurchasePrice), SortOrderOptions.DESC) => allCostumes.OrderByDescending(temp => temp.PurchasePrice).ToList(),
+
                 _ => allCostumes,
             };
 

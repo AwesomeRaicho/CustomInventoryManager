@@ -35,7 +35,8 @@
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.CostumeName)},
-                {"DisplayName", "Costume Name"}
+                {"DisplayName", "Costume Name"},
+                {"Route" , "costumes"}
             })
 
 
@@ -43,41 +44,47 @@
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.Gender)},
-                {"DisplayName", "Gender"}
+                {"DisplayName", "Gender"},
+                {"Route" , "costumes"}
             })
 
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.Age)},
-                {"DisplayName", "Age"}
+                {"DisplayName", "Age"},
+                {"Route" , "costumes"}
             })
 
             
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.Size)},
-                {"DisplayName", "Size"}
+                {"DisplayName", "Size"},
+                {"Route" , "costumes"}
             })
 
             
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.PurchasePrice)},
-                {"DisplayName", "Purchase Price"}
+                {"DisplayName", "Purchase Price"},
+                {"Route" , "costumes"}
             })
 
             
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.EntryDate)},
-                {"DisplayName", "Entry Date"}
+                {"DisplayName", "Entry Date"},
+                {"Route" , "costumes"}
             })
 
             
             @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData)
             {
                 {"ColumnName", nameof(CostumeResponse.ExitDate)},
-                {"DisplayName", "Exit Date"}
+                {"DisplayName", "Exit Date"},
+                {"Route" , "costumes"}
             })
         </tr>
     </thead>
