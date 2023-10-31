@@ -1,0 +1,64 @@
+﻿
+@{
+    Dictionary<string, string> themes = new Dictionary<string, string>()
+    {
+
+    };
+}
+
+
+<form action="~/clothes/create" method="post">
+    <div>
+        <label for="Theme">Theme</label>
+        <select id="Theme" name="Theme">
+            <option></option>
+            @foreach(ThemeOptions option in Enum.GetValues(typeof(ThemeOptions)))
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="ClothesType">Clothes Type</label>
+        <select id="ClothesType" name="ClothesType">
+            <option></option>
+
+            @foreach(ClothesTypeOptions option in Enum.GetValues(typeof(ClothesTypeOptions)))
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>    
+    <div>
+        <label for="Model">Model</label>
+        <input id="Model" type="text" name="Model" />
+    </div>
+    <div>
+        <label for="Gender">Gender</label>
+        <input type="radio" name="Gender" value="Male" id="Male"/>
+        <label for="Male">Male</label>
+        <input type="radio" name="Gender" value="Female" id="Female"/>
+        <label for="Female">Female</label>        
+        <input type="radio" name="Gender" value="Other" id="Other"/>
+        <label for="Other">Other</label>
+    </div>
+    <div>
+        <label for="Size">Size</label>
+        <input type="text" name="Size" id="Size"/>
+    </div>
+        <div>
+        <label for="PurchasePrice">Purchase Price</label>
+        <input type="number" step="0.01" name="PurchasePrice" id="PurchasePrice"/>
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+@if(ViewBag.Errors != null)
+{
+    <ul>
+        @foreach(string error in ViewBag.Errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}

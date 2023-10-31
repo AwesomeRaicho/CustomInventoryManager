@@ -18,10 +18,75 @@ namespace Services
         private readonly List<Clothes> _soldClothes;
 
         //Contructor
-        public ClothesService() 
+        public ClothesService(bool init = true) 
         { 
             _clothes = new List<Clothes>();
             _soldClothes = new List<Clothes>();
+
+            if(init)
+            {
+                ClothesAddRequest request1 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Baptism,
+                    ClothesType = ClothesTypeOptions.Vestido,
+                    Gender = GenderOptions.Female,
+                    Model = "17",
+                    PurchasePrice = 155.23,
+                    Size = "8"
+                };
+                ClothesAddRequest request2 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Baptism,
+                    ClothesType = ClothesTypeOptions.Zapatos,
+                    Gender = GenderOptions.Male,
+                    Model = "Cupon",
+                    PurchasePrice = 200.00,
+                    Size = "3"
+                };
+                ClothesAddRequest request3 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Wedding,
+                    ClothesType = ClothesTypeOptions.Vestido,
+                    Gender = GenderOptions.Female,
+                    Model = "S23",
+                    PurchasePrice = 250.36,
+                    Size = "17"
+                };
+                ClothesAddRequest request4 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Other,
+                    ClothesType = ClothesTypeOptions.Ropon,
+                    Gender = GenderOptions.Female,
+                    Model = "2",
+                    PurchasePrice = 222.22,
+                    Size = "1"
+                };
+                ClothesAddRequest request5 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Other,
+                    ClothesType = ClothesTypeOptions.Misc,
+                    Gender = GenderOptions.Male,
+                    Model = "3.4",
+                    PurchasePrice = 36.00,
+                    Size = "2"
+                };
+                ClothesAddRequest request6 = new ClothesAddRequest()
+                {
+                    Theme = ThemeOptions.Communion,
+                    ClothesType = ClothesTypeOptions.Traje,
+                    Gender = GenderOptions.Male,
+                    Model = "5",
+                    PurchasePrice = 136.57,
+                    Size = "5"
+                };
+                this.AddClothes(request1);
+                this.AddClothes(request2);
+                this.AddClothes(request3);
+                this.AddClothes(request4);
+                this.AddClothes(request5);
+                this.AddClothes(request6);
+
+            }
         }
 
         public ClothesResponse AddClothes(ClothesAddRequest? clothesAddRequest)
@@ -107,7 +172,7 @@ namespace Services
                     MatchingClothes = allClothes.Where(temp => (!string.IsNullOrEmpty(temp.ClothesType) && temp.ClothesType != null) ? temp.ClothesType.Contains(filterString) : true).ToList();
                     break;
                 case nameof(Clothes.Gender):
-                    MatchingClothes = allClothes.Where(temp => (!string.IsNullOrEmpty(temp.Gender)) ? temp.Gender.Equals(filterString, StringComparison.OrdinalIgnoreCase) : true).ToList();
+                    MatchingClothes = allClothes.Where(temp => (!string.IsNullOrEmpty(temp.Gender)) ? temp.Gender.Contains(filterString, StringComparison.OrdinalIgnoreCase) : true).ToList();
                     break;
                 case nameof(Clothes.EntryDate):
                     MatchingClothes = allClothes.Where(temp => temp.EntryDate != null && temp.EntryDate.Value.ToString("yyyy-MM-dd").Contains(filterString)).ToList();
@@ -119,7 +184,7 @@ namespace Services
                     MatchingClothes = allClothes.Where(temp => temp.PurchasePrice.ToString() == filterString).ToList();
                     break;
                 case nameof(Clothes.Theme):
-                    MatchingClothes = allClothes.Where(temp => (!string.IsNullOrEmpty(temp.Theme) && temp.Theme != null) ? temp.Theme.Contains(filterString) : true).ToList();
+                    MatchingClothes = allClothes.Where(temp => (!string.IsNullOrEmpty(temp.Theme)) ? temp.Theme.Contains(filterString, StringComparison.OrdinalIgnoreCase) : true).ToList();
                     break;
                 default: 
                     MatchingClothes = allClothes;
@@ -129,26 +194,28 @@ namespace Services
             return MatchingClothes;
         }
 
-        public List<ClothesResponse> GetSortedClothes(List<ClothesResponse> allClothes, string sortBy, SortOrderOptions sortOrder)
+        public List<ClothesResponse> GetSortedClothes(List<ClothesResponse> allClothes, string orderBy, SortOrderOptions sortOrder)
         {
-            if (string.IsNullOrEmpty(sortBy)) return allClothes;
+            if (string.IsNullOrEmpty(orderBy)) return allClothes;
 
-            List<ClothesResponse> SortedClothes = (sortBy, sortOrder) switch
+            List<ClothesResponse> SortedClothes = (orderBy, sortOrder) switch
             {
-                (nameof(Clothes.Size), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.Size).ToList(),
-                (nameof(Clothes.Size), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.Size).ToList(),
+                (nameof(Clothes.Size), SortOrderOptions.ASC) => allClothes.OrderBy(temp =>  int.TryParse(temp.Size, out var size) ? size : int.MaxValue).ToList(),
+                (nameof(Clothes.Size), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => int.TryParse(temp.Size, out var size) ? size : int.MaxValue).ToList(),
                 (nameof(Clothes.ClothesType), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.ClothesType).ToList(),
-                (nameof(Clothes.ClothesType), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.ClothesType).ToList(),
+                (nameof(Clothes.ClothesType), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.ClothesType).ToList(),
                 (nameof(Clothes.EntryDate), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.EntryDate).ToList(),
-                (nameof(Clothes.EntryDate), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.EntryDate).ToList(),
+                (nameof(Clothes.EntryDate), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.EntryDate).ToList(),
                 (nameof(Clothes.ExitDate), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.ExitDate).ToList(),
-                (nameof(Clothes.ExitDate), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.ExitDate).ToList(),
+                (nameof(Clothes.ExitDate), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.ExitDate).ToList(),
                 (nameof(Clothes.Gender), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.Gender).ToList(),
-                (nameof(Clothes.Gender), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.Gender).ToList(),
+                (nameof(Clothes.Gender), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.Gender).ToList(),
                 (nameof(Clothes.Theme), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.Theme).ToList(),
-                (nameof(Clothes.Theme), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.Theme).ToList(),
+                (nameof(Clothes.Theme), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.Theme).ToList(),
                 (nameof(Clothes.Model), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.Model).ToList(),
-                (nameof(Clothes.Model), SortOrderOptions.DESC) => allClothes.OrderBy(temp => temp.Model).ToList(),
+                (nameof(Clothes.Model), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.Model).ToList(),
+                (nameof(Clothes.PurchasePrice), SortOrderOptions.ASC) => allClothes.OrderBy(temp => temp.PurchasePrice).ToList(),
+                (nameof(Clothes.PurchasePrice), SortOrderOptions.DESC) => allClothes.OrderByDescending(temp => temp.PurchasePrice).ToList(),
 
                 _ => allClothes,
             };

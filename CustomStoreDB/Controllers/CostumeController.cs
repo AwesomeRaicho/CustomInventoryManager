@@ -12,12 +12,12 @@ namespace CustomStoreDB.Controllers
         private readonly ICostumeService _costumeService;
 
         //constructor
-        public CostumeController()
+        public CostumeController(ICostumeService costumeService)
         {
-            _costumeService = new CostumeService();
+            _costumeService = costumeService;
         }
 
-        [Route("/")]
+
         [Route("Costumes")]
         public IActionResult Costumes(string filterBy, string? searchString, string orderBy = nameof(CostumeResponse.CostumeName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {

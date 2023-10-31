@@ -16,12 +16,24 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Clothes/Clothes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvdGhlc1xDbG90aGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Clothes/CreateClothes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xvdGhlc1xDcmVhdGVDbG90aGVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Costume/Costumes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29zdHVtZVxDb3N0dW1lcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Costume/CreateCostume.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29zdHVtZVxDcmVhdGVDb3N0dW1lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/users/Documents/Programing/C\#/ASP/CustomStoreDB/CustomStoreDB/Views/Shared/_GridColumnHeaderPartialView.cshtml]

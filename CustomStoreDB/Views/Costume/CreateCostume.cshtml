@@ -52,13 +52,13 @@
 
 </form>
 
-@if(ViewBag.Errors !=null)
+@if(ViewBag.Errors != null)
 {
     <div class="text-red ml">
         <ul>
             @foreach(string error in ViewBag.Errors)
             {
-                <li class="ml">@error</li>
+                <li>@error</li>
             }
         </ul>
     </div>

@@ -22,7 +22,7 @@ namespace ServicesTests
         //contructor
         public ClothesServiceTests(ITestOutputHelper testOutputHelper)
         {
-            _clothesService = new ClothesService();
+            _clothesService = new ClothesService(false);
             _testOutputHelper = testOutputHelper;
         }
 
@@ -465,7 +465,7 @@ namespace ServicesTests
                 _testOutputHelper.WriteLine(response.ToString());
             }
             //Act
-            List<ClothesResponse> clothes_responses_from_getfiltered = _clothesService.GetFilteredClothes(nameof(Clothes.Gender), "Male");
+            List<ClothesResponse> clothes_responses_from_getfiltered = _clothesService.GetFilteredClothes(nameof(Clothes.Gender), "fe");
 
             
 
@@ -478,9 +478,9 @@ namespace ServicesTests
 
 
             //Assert
-            Assert.Contains(clothes_responses_list_from_add[1], clothes_responses_from_getfiltered);
-            Assert.DoesNotContain(clothes_responses_list_from_add[0], clothes_responses_from_getfiltered);
-            Assert.DoesNotContain(clothes_responses_list_from_add[2], clothes_responses_from_getfiltered);
+            Assert.DoesNotContain(clothes_responses_list_from_add[1], clothes_responses_from_getfiltered);
+            Assert.Contains(clothes_responses_list_from_add[0], clothes_responses_from_getfiltered);
+            Assert.Contains(clothes_responses_list_from_add[2], clothes_responses_from_getfiltered);
 
         }
 
