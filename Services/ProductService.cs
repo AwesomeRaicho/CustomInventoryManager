@@ -19,10 +19,81 @@ namespace Services
 
 
         //constructor
-        public ProductService()
+        public ProductService(bool init  = true)
         {
             _productsList = new List<Product>();
             _soldProductsList = new List<Product>();
+
+            if (init)
+            {
+                ProductAddRequest request1 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Arras,
+                    Color = "Gold",
+                    Gender = GenderOptions.Other,
+                    Size = "3",
+                    Theme = ThemeOptions.Wedding,
+                    PurchasePrice = 100.00,
+                    ProductDescription = "coins for wedding"
+                };
+                ProductAddRequest request2 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Bow,
+                    Color = "Red",
+                    Gender = GenderOptions.Female,
+                    Size = "small",
+                    Theme = ThemeOptions.Other,
+                    PurchasePrice = 30.00,
+                    ProductDescription = "regular bow"
+                };
+                ProductAddRequest request3 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Underwear,
+                    Color = "white",
+                    Gender = GenderOptions.Female,
+                    Size = "medium",
+                    Theme = ThemeOptions.Other,
+                    PurchasePrice = 35.00,
+                    ProductDescription = "calsones"
+                };
+                ProductAddRequest request4 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Arras,
+                    Color = "Gold",
+                    Gender = GenderOptions.Other,
+                    Size = "5",
+                    Theme = ThemeOptions.Wedding,
+                    PurchasePrice = 100.00,
+                    ProductDescription = "coins for wedding"
+                };
+                ProductAddRequest request5 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Valerina,
+                    Color = "Gray",
+                    Gender = GenderOptions.Female,
+                    Size = "7",
+                    Theme = ThemeOptions.Other,
+                    PurchasePrice = 50,
+                    ProductDescription = ""
+                };
+                ProductAddRequest request6 = new ProductAddRequest()
+                {
+                    ProductType = ProductTypeOptions.Candles,
+                    Color = "blue",
+                    Gender = GenderOptions.Other,
+                    Size = "large",
+                    Theme = ThemeOptions.Communion,
+                    PurchasePrice = 15.00,
+                    ProductDescription = "Velas"
+                };
+
+                this.AddProduct(request1);
+                this.AddProduct(request2);
+                this.AddProduct(request3);
+                this.AddProduct(request4);
+                this.AddProduct(request5);
+                this.AddProduct(request6);
+            }
         }
 
 

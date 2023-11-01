@@ -1,0 +1,94 @@
+﻿@model IEnumerable<ProductResponse>;
+@{
+}
+
+<h1>Products</h1>
+
+<form action="~/products" method="get">
+    <select name="filterBy">
+        @foreach(var option in ViewBag.SearchFields)
+        {
+            if(option.Key == ViewBag.CurrentFilterBy)
+            {
+                <option value="@option.Key" selected="selected">@option.Value</option>
+            } else
+            {
+                <option value="@option.Key">@option.Value</option>
+            }
+        }
+    </select>   
+
+    <input type="text" name="searchString" />
+    <button type="submit">Search</button>
+    <a href="~/products">Clear all</a>
+</form>
+
+
+<table>
+    <thead>
+        <tr>
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.ProductType)},
+                {"DisplayName" , "Product Type"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.ProductDescription)},
+                {"DisplayName" , "Description"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.Color)},
+                {"DisplayName" , "Color"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.Theme)},
+                {"DisplayName" , "Theme"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.Gender)},
+                {"DisplayName" , "Gender"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.Size)},
+                {"DisplayName" , "Size"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.PurchasePrice)},
+                {"DisplayName" , "Purchase Price"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.EntryDate)},
+                {"DisplayName" , "Entry Date"},
+                {"Route", "products"},
+            } )
+            @await Html.PartialAsync("_GridColumnHeaderPartialView", new ViewDataDictionary(ViewData){
+                {"ColumnName", nameof(ProductResponse.ExitTime)},
+                {"DisplayName" , "Exit Time"},
+                {"Route", "products"},
+            } )
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(ProductResponse product in Model)
+        {
+            <tr>
+                <td>@product.ProductType</td>
+                <td>@product.ProductDescription</td>
+                <td>@product.Color</td>
+                <td>@product.Theme</td>
+                <td>@product.Gender</td>
+                <td>@product.Size</td>
+                <td>@product.PurchasePrice</td>
+                <td>@product.EntryDate?.ToString("dd MMM yyyy")</td>
+                <td>@product.ExitTime?.ToString("dd MMM yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
