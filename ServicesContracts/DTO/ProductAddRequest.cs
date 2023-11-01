@@ -11,11 +11,11 @@ namespace ServicesContracts.DTO
 {
     public class ProductAddRequest
     {
-        [Required(ErrorMessage = "Must add product type price")]
+        [Required(ErrorMessage = "Must add product type")]
         public ProductTypeOptions ProductType { get; set; }
         public string? ProductDescription { get; set; }
         public string? Color { get; set;}
-        [Required(ErrorMessage = "Must add theme price")]
+        [Required(ErrorMessage = "Must add theme")]
         public ThemeOptions? Theme { get; set; }
         public GenderOptions? Gender { get; set; }
         public string? Size { get; set; }

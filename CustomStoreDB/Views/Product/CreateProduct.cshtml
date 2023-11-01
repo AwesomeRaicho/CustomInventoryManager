@@ -1,0 +1,76 @@
+﻿
+@{
+}
+
+
+<form action="~/products/create" method="post">
+
+    <div>
+        <label for="ProductType">Product Type</label>
+        <select id="ProductType" name="ProductType">
+            <option></option>
+
+            @foreach(var option in Enum.GetValues(typeof(ProductTypeOptions)))
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="ProductDescription">Product Description</label>
+        <input type="text" name="ProductDescription" id="ProductDescription"/>
+    </div>
+
+    <div>
+        <label for="Color">Color</label>
+        <input type="text" id="Color" name="Color" />
+    </div>
+
+    <div>
+        <label for="Theme">Theme</label>
+        <select name="Theme">
+            <option></option>
+            @foreach(var option in Enum.GetValues(typeof(ThemeOptions)))
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="Gender">Gender</label>
+        <select name="Gender" id="Gender">
+            <option></option>
+            @foreach(var option in Enum.GetValues(typeof(GenderOptions)))
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="Size">Size</label>
+        <input type="text" id="Size" name="Size" />
+    </div>
+
+    <div>
+        <label for="PurchasePrice">Purchase Price</label>
+        <input type="number" step="0.01" id="PurchasePrice" name="PurchasePrice" />
+    </div>
+
+    <button type="submit">Create</button>
+</form>
+
+@if(ViewBag.Errors != null)
+{
+    <div>
+        <ul>
+            @foreach(string error in ViewBag.Errors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+
+}

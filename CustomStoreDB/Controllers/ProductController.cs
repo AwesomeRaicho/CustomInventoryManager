@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Services;
 using ServicesContracts;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
@@ -41,5 +42,33 @@ namespace CustomStoreDB.Controllers
 
             return View(sortedProducts);
         }
+
+        [Route("products/create")]
+        [HttpGet]
+        public IActionResult CreateProduct()
+        {
+            return View();
+        }
+
+        [Route("products/create")]
+        [HttpPost]
+        public IActionResult CreateProduct(ProductAddRequest productAddRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+                return View();
+            }
+
+
+            _productsServices.AddProduct(productAddRequest);
+
+            return RedirectToAction("Products", "Product");
+        }
+
+
+
+
     }
 }
