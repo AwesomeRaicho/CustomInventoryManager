@@ -30,6 +30,7 @@ namespace ServicesContracts.DTO
             {
                 ClothesID = ClothesID,
                 Theme = Theme,
+                ClothesType = ClothesType,
                 Model = Model,
                 Gender = Gender,
                 Size = Size,

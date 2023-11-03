@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ServicesContracts;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
@@ -62,6 +63,58 @@ namespace CustomStoreDB.Controllers
 
             _clothesService.AddClothes(clothesAddRequest);
             return RedirectToAction("Clothes");
+        }
+
+
+
+        [Route("clothes/edit")]
+        [HttpGet]
+        public IActionResult Edit(Guid clothesID)
+        {
+            ClothesResponse? clothes = _clothesService.GetClothesByClothesID(clothesID);
+
+            if(clothes == null)
+            {
+                return RedirectToAction("clothes");
+            }
+
+            
+            return View(clothes.ToClothesUpdateRequest());
+        }
+
+
+        [Route("clothes/edit")]
+        [HttpPost]
+        public IActionResult Edit(ClothesUpdateRequest clothesUpdateRequest)
+        {
+
+            _clothesService.UpdateClothes(clothesUpdateRequest);
+
+            return RedirectToAction("clothes");
+        }
+
+        [Route("clothes/delete")]
+        [HttpGet]
+        public IActionResult Delete(Guid clothesID)
+        {
+            ClothesResponse? response = _clothesService.GetClothesByClothesID(clothesID);
+
+            if(response == null)
+            {
+                return RedirectToAction("clothes");
+            }
+
+            return View(response);
+        }
+
+
+        [Route("clothes/delete")]
+        [HttpPost]
+        public IActionResult Delete(ClothesResponse clothesResponse)
+        {
+            _clothesService.DeleteClothes(clothesResponse.ClothesID);
+
+            return RedirectToAction("clothes");
         }
     }
 }

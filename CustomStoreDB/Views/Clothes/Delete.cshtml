@@ -1,0 +1,92 @@
+﻿@model ClothesResponse;
+@{
+
+}
+
+
+<h1>Edit Clothes</h1>
+<h2>Are you sure you wish to delete?</h2>
+<form action="~/clothes/delete" method="post">
+
+    <input asp-for="ClothesID" type="hidden"/>
+
+    <div>
+        <label asp-for="Theme">Theme</label>
+        <select name="Theme">
+            @foreach (var theme in Enum.GetValues(typeof(ThemeOptions)))
+            {
+                if(Model.Theme == theme.ToString())
+                {
+                    <option value="@theme" selected="selected">@theme</option>
+                }else
+                {
+                    <option value="@theme">@theme</option>
+                }
+            }
+        </select>
+    </div>    
+    
+    <div>
+        <label asp-for="ClothesType">Clothes Type</label>
+        <select name="ClothesType">
+            @foreach (var type in Enum.GetValues(typeof(ClothesTypeOptions)))
+            {
+                if(Model.ClothesType == type.ToString())
+                {
+                    <option value="@type" selected="selected">@type</option>
+                }else
+                {
+                    <option value="@type">@type</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="Model">Model</label>
+        <input asp-for="Model" />
+    </div>
+
+    
+    <div>
+        <label asp-for="Gender">Gender</label>
+        <select name="Gender">
+             @foreach(var gender in Enum.GetValues(typeof(GenderOptions)))
+            {
+                if(Model.Gender == gender.ToString())
+                {
+                    <option value="@gender" selected="selected">@gender</option>
+                }else
+                {
+                    <option value="@gender">@gender</option>
+                }
+            }
+        </select>
+    </div>
+
+    
+    <div>
+        <label asp-for="Size">Size</label>
+        <input asp-for="Size" />
+    </div>
+
+    
+    <div>
+        <label asp-for="PurchasePrice">Purchase Price</label>
+        <input asp-for="PurchasePrice" />
+    </div>
+
+    <div>
+        <label asp-for="EntryDate">Entry Date</label>
+        <input asp-for="EntryDate" />
+    </div>
+
+        <div>
+        <label asp-for="ExitDate">Exit Date</label>
+        <input asp-for="ExitDate" disabled/>
+    </div>
+
+    <div>
+        <button type="submit">Delete</button>
+    </div>
+</form>

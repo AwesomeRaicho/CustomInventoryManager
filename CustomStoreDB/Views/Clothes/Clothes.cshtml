@@ -102,6 +102,10 @@
                 <td>@clothes.PurchasePrice</td>
                 <td>@clothes.EntryDate?.ToString("dd MMM yyyy")</td>
                 <td>@clothes.ExitDate?.ToString("dd MMM yyyy")</td>
+                <td>
+                    <a href="~/clothes/edit?clothesID=@(clothes.ClothesID)">Edit</a>
+                    <a href="~/clothes/delete?clothesID=@(clothes.ClothesID)">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
