@@ -1,0 +1,69 @@
+﻿@model CostumeUpdateRequest;
+
+@{
+}
+
+<h1>Edit Costume</h1>
+
+<form action="~/costumes/edit" method="post">
+    <input asp-for="CostumeID" type="hidden"/>
+
+    <div>
+        <label asp-for="CostumeName">Costume Name</label>
+        <input asp-for="CostumeName" />
+    </div>
+
+    <div>
+        <label asp-for="Gender">Gender</label>
+        <select asp-for="Gender">
+            @foreach(var option in Enum.GetNames(typeof(GenderOptions)))
+            {
+                if(option == Model.Gender.ToString())
+                {
+                    <option value="@option" selected="selected">@option</option>
+                }else
+                {
+                    <option value="@option">@option</option>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <label asp-for="Size">Size</label>
+        <input asp-for="Size" />
+        
+    </div>
+    <div>
+        <label asp-for="Age">Age</label>
+        <input asp-for="Age" />
+
+    </div>
+    <div>
+        <label asp-for="PurchasePrice">Purchase Price</label>
+        <input asp-for="PurchasePrice" />
+
+    </div>
+    <div>
+        <label asp-for="EntryDate">Entry Date</label>
+        <input asp-for="EntryDate" />
+
+    </div>
+    <div>
+        <label asp-for="ExitDate" >Exit Date</label>
+        <input asp-for="ExitDate" disabled/>
+
+    </div>
+    
+
+    <button type="submit">Edit</button>
+</form>
+
+@if(ViewBag.Errors != null)
+{
+    <ul>
+        @foreach(var error in ViewBag.Errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}

@@ -99,6 +99,11 @@
                 <td>@costume.PurchasePrice</td>
                 <td>@costume.EntryDate?.ToString("dd MMM yyyy")</td>
                 <td>@costume.ExitDate?.ToString("dd MMM yyyy")</td>
+                <td>
+                    <a href="~/costumes/edit?costumeID=@(costume.CostumeID)">Edit</a> 
+                    <a href="~/costumes/delete?costumeID=@(costume.CostumeID)">Delete</a> 
+
+                </td>
             </tr>
         }
     </tbody>

@@ -22,6 +22,7 @@ namespace ServicesContracts.DTO
         public string? Size { get; set; }
         [Required(ErrorMessage = "Age must be supplied")]
         public string? Age { get; set; }
+
         [Required(ErrorMessage = "Purchace price must be supplied")]
         public double? PurchasePrice { get; set; }
         public DateTime? EntryDate { get; set; }

@@ -90,3 +90,13 @@
         <button type="submit">Update</button>
     </div>
 </form>
+
+@if(ViewBag.Errors != null)
+{
+    <ul>
+        @foreach(var error in ViewBag.Errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}

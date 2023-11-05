@@ -1,0 +1,27 @@
+﻿@model CostumeUpdateRequest;
+@{
+}
+
+
+<form action="~/costumes/delete" method="post">
+    <input asp-for="CostumeID" type="hidden"/>
+
+    <div>
+        <label asp-for="CostumeName">Costume Name</label>
+        <input asp-for="CostumeName" disabled/>
+    </div>
+
+    <div>
+        <label asp-for="Size">Size</label>
+        <input  asp-for="Size" disabled/>
+    </div>
+
+    <div>
+        <label asp-for="EntryDate">Entry Date</label>
+        <input  asp-for="EntryDate" disabled/>
+    </div>
+
+    <div>
+        <button type="submit">Delete</button>
+    </div>
+</form>

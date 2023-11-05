@@ -87,6 +87,15 @@ namespace CustomStoreDB.Controllers
         [HttpPost]
         public IActionResult Edit(ClothesUpdateRequest clothesUpdateRequest)
         {
+            //NEED TO RETURN ERRORS IF MODEL IS NOT CORRECT
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e=> e.ErrorMessage).ToList();
+
+                return View(clothesUpdateRequest);
+            }
+
+
 
             _clothesService.UpdateClothes(clothesUpdateRequest);
 
@@ -112,6 +121,7 @@ namespace CustomStoreDB.Controllers
         [HttpPost]
         public IActionResult Delete(ClothesResponse clothesResponse)
         {
+
             _clothesService.DeleteClothes(clothesResponse.ClothesID);
 
             return RedirectToAction("clothes");
