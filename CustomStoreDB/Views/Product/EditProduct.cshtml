@@ -1,0 +1,103 @@
+﻿@model ProductUpdateRequest;
+@{
+}
+<h1>Edit Product</h1>
+
+
+<form action="~/products/edit" method="post">
+    <input asp-for="ProductID" type="hidden"/>
+    
+    <div>
+        <label asp-for="ProductType"></label>
+        <select asp-for="ProductType">
+            @foreach(var option in Enum.GetNames(typeof(ProductTypeOptions)))
+            {
+                if(option == Model.ProductType.ToString())
+                {
+                    <option value="@(option)" selected>@(option)</option>
+                }
+                else
+                {
+                    <option value="@(option)">@(option)</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="ProductDescription">Product Description</label>
+        <input asp-for="ProductDescription" />
+    </div>
+    <div>
+        <label asp-for="Color">Color</label>
+        <input asp-for="Color" />
+
+    </div>
+    <div>
+        <label asp-for="Theme">Theme</label>
+         <select asp-for="Theme">
+            @foreach(var option in Enum.GetNames(typeof(ThemeOptions)))
+            {
+                if(option == Model.Theme.ToString())
+                {
+                    <option value="@(option)" selected>@(option)</option>
+                }
+                else
+                {
+                    <option value="@(option)">@(option)</option>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <label asp-for="Gender">Gender</label>
+        
+         <select asp-for="Gender">
+            @foreach(var option in Enum.GetNames(typeof(GenderOptions)))
+            {
+                if(option == Model.Gender.ToString())
+                {
+                    <option value="@(option)" selected>@(option)</option>
+                }
+                else
+                {
+                    <option value="@(option)">@(option)</option>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <label asp-for="Size">Size</label>
+        <input asp-for="Size" />
+
+    </div>
+    <div>
+        <label asp-for="PurchasePrice">Purchase Price</label>
+        <input asp-for="PurchasePrice" />
+
+    </div>
+    <div>
+        <label asp-for="EntryDate">Entry Date</label>
+        <input asp-for="EntryDate" />
+
+    </div>
+    <div>
+        <label asp-for="EntryDate">EntryDate</label>
+        <input asp-for="EntryDate" disabled/>
+
+    </div>
+
+    <div>
+        <button type="submit">Edit</button>
+    </div>
+</form>
+
+@if(ViewBag.Errors != null)
+{
+    <ul>
+        @foreach(var error in ViewBag.Errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}

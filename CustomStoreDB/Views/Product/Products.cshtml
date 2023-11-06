@@ -88,6 +88,10 @@
                 <td>@product.PurchasePrice</td>
                 <td>@product.EntryDate?.ToString("dd MMM yyyy")</td>
                 <td>@product.ExitTime?.ToString("dd MMM yyyy")</td>
+                <td>
+                    <a href="~/products/edit?productID=@(product.ProductID)">Edit</a>
+                    <a href="~/products/delete?productID=@(product.ProductID)">Delete</a>
+                </td>
             </tr>
         }
     </tbody>

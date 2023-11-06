@@ -67,8 +67,59 @@ namespace CustomStoreDB.Controllers
             return RedirectToAction("Products", "Product");
         }
 
+        [Route("products/edit")]
+        [HttpGet]
+        public IActionResult EditProduct(Guid productID)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+
+            if (response == null) return RedirectToAction("products");
+
+
+            return View(response.ToProductUpdateRequest());
+        }
+
+
+        [Route("products/edit")]
+        [HttpPost]
+        public IActionResult EditProduct(ProductUpdateRequest productUpdateRequest)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
+
+            if (response == null) return RedirectToAction("products");
+
+            _productsServices.UpdateProduct(productUpdateRequest);
+
+            return RedirectToAction("products");
+        }
+
+
+        // create Delete
+        [Route("products/delete")]
+        [HttpGet]
+        public IActionResult DeleteProduct(Guid productID)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+
+            if (response == null) return RedirectToAction("product");
 
 
 
+            return View(response.ToProductUpdateRequest());
+        }
+
+        [Route("products/delete")]
+        [HttpPost]
+        public IActionResult DeleteProduct(ProductUpdateRequest productUpdateRequest)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
+
+            if(response == null) return RedirectToAction("products");
+
+            _productsServices.DeleteProduct(productUpdateRequest.ProductID);
+
+            return RedirectToAction("products");
+
+        }
     }
 }
