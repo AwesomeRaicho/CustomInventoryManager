@@ -121,5 +121,32 @@ namespace CustomStoreDB.Controllers
             return RedirectToAction("products");
 
         }
+
+        //sell a product
+        [Route("products/sell")]
+        [HttpGet]
+        public IActionResult SellProduct(Guid productID)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+
+            if (response == null) return RedirectToAction("products");
+
+            
+
+            return View(response);
+        }
+
+        [Route("products/sell")]
+        [HttpPost]
+        public IActionResult SellProduct(ProductResponse productResponse)
+        {
+            ProductResponse? response = _productsServices.GetProductByProductID(productResponse.ProductID);
+
+            if (response == null) return RedirectToAction("products");
+
+            _productsServices.SoldProductByProductID(productResponse.ProductID);
+
+            return RedirectToAction("products");
+        }
     }
 }
