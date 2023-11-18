@@ -22,7 +22,7 @@ namespace ServicesTests
         //contructor
         public ClothesServiceTests(ITestOutputHelper testOutputHelper)
         {
-            _clothesService = new ClothesService(false);
+            //_clothesService = new ClothesService(false);
             _testOutputHelper = testOutputHelper;
         }
 

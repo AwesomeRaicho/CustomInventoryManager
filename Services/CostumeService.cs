@@ -5,22 +5,28 @@ using ServicesContracts;
 using Services.Helpers;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
+using Azure;
 
 namespace Services
 {
     public class CostumeService : ICostumeService
     {
         //private fields
+        IRepository<Costume> _repository;
+        
         List<Costume> _costumes;
-        List<Costume> _soldCostumes;
+        List<Costume>? _soldCostumes = null;
+
 
         //constructor
-        public CostumeService(bool init = true)
+        public CostumeService( IRepository<Costume> repository, bool init = true)
         {
-            _costumes = new List<Costume>(); 
-            _soldCostumes = new List<Costume>();
+            _repository = repository;
 
-            if (init)
+            _costumes = new List<Costume>();
+
+
+            if (false)
             {
                 CostumeAddRequest request1 = new CostumeAddRequest()
                 {
@@ -82,17 +88,27 @@ namespace Services
 
             Costume costume = costumeAddRequest.ToCostume();
 
+
             costume.CostumeID = Guid.NewGuid();
             costume.EntryDate = DateTime.Now;
 
-            _costumes.Add(costume);
+            _repository.Add(costume);
 
             return costume.ToCostumeResponse();
 
         }
         public List<CostumeResponse> GetAllCostumes()
         {
-            return _costumes.Select(costume => costume.ToCostumeResponse()).ToList();
+            List<CostumeResponse> costumes = new List<CostumeResponse>();
+
+            IEnumerable<Costume> fromRepo =  _repository.GetAll(1 , 100);
+
+            foreach (Costume costume in fromRepo)
+            {
+                costumes.Add(costume.ToCostumeResponse());
+            }
+
+            return costumes;
         }
         public CostumeResponse? GetCostumeByCostumeID(Guid? costumeID)
         {

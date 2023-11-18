@@ -1,13 +1,24 @@
 using ServicesContracts;
 using Services;
+using Entities;
+using Microsoft.EntityFrameworkCore;
+using Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<IClothesService, ClothesService>();
-builder.Services.AddSingleton<ICostumeService, CostumeService>();
-builder.Services.AddSingleton<IProductsServices, ProductService>();
+builder.Services.AddScoped<IClothesService, ClothesService>();
+builder.Services.AddScoped<ICostumeService, CostumeService>();
+builder.Services.AddScoped<IProductsServices, ProductService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+
+builder.Services.AddDbContext<AllDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+});
 
 var app = builder.Build();
 

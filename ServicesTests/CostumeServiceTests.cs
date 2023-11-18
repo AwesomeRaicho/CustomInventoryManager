@@ -18,7 +18,7 @@ namespace ServicesTests
         //constructor 
         public CostumeServiceTests(ITestOutputHelper testOutputHelper)
         {
-            _costumeService = new CostumeService(false);
+            //_costumeService = new CostumeService(false);
             _testOutputHelper = testOutputHelper;
         }
 

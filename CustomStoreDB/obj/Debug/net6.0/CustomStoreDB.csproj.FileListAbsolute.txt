@@ -176,3 +176,5 @@ C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\System.Text.Json.dll
 C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\Repository.dll
+C:\Users\users\Documents\Programing\C#\ASP\CustomStoreDB\CustomStoreDB\bin\Debug\net6.0\Repository.pdb

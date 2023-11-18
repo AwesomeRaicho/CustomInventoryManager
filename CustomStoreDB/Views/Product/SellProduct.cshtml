@@ -10,7 +10,7 @@
     <input asp-for="ProductID" type="hidden"/>
     
     <div>
-        <label asp-for="ProductType"></label>
+        <label asp-for="ProductType">ProductType</label>
         <select asp-for="ProductType" disabled>
             @foreach(var option in Enum.GetNames(typeof(ProductTypeOptions)))
             {

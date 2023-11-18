@@ -22,7 +22,7 @@ namespace ServicesTests
         //constructor
         public ProductServiceTests(ITestOutputHelper testOutputHelper)
         {
-            _productsService = new ProductService(false);
+            //_productsService = new ProductService(false);
             _testOutputHelper = testOutputHelper;
         }
 
