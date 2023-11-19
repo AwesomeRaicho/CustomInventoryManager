@@ -114,7 +114,12 @@ namespace Services
         {
             if (costumeID == null) return null;
 
-            return _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID)?.ToCostumeResponse();
+            Costume? costume = _repository.GetById((Guid)costumeID);
+
+            if (costume == null) return null;
+
+
+            return costume.ToCostumeResponse();
         }
 
         public List<CostumeResponse> GetAllSoldCostumes()
@@ -196,11 +201,19 @@ namespace Services
         {
             if(costumeID == null) throw new ArgumentNullException(nameof(costumeID));
 
-            Costume? toRemove = _costumes.FirstOrDefault(temp => temp.CostumeID == costumeID);
+            Costume? toRemove = _repository.GetById((Guid)costumeID);
 
-            if(toRemove == null) return false;
+            if(toRemove == null)
+            {
+                return false;
+            }
+            else
+            {
+                _repository.Delete(toRemove);
 
-            return  _costumes.Remove(toRemove);
+                return true;
+            }
+
         }
 
         public List<CostumeResponse> GetSortedCostumes(List<CostumeResponse> allCostumes, string orderBy, SortOrderOptions sortOrder)
@@ -236,7 +249,9 @@ namespace Services
 
             ValidationHelper.ModelValidation(costumeUpdateRequest);
 
-            Costume? costume = _costumes.FirstOrDefault(temp => temp.CostumeID == costumeUpdateRequest.CostumeID);
+            Costume? costume = _repository.GetById(costumeUpdateRequest.CostumeID);
+
+
 
             if (costume == null) throw new ArgumentException(nameof(costume.CostumeID));
 
@@ -248,6 +263,8 @@ namespace Services
             costume.Gender = costumeUpdateRequest.Gender.ToString();
             costume.ExitDate = costumeUpdateRequest.ExitDate;
             costume.Size = costumeUpdateRequest.Size;
+
+            _repository.Update(costume);
 
             return costume.ToCostumeResponse();
         }
