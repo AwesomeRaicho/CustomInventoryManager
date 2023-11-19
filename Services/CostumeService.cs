@@ -14,8 +14,6 @@ namespace Services
         //private fields
         IRepository<Costume> _repository;
         
-        List<Costume> _costumes;
-        List<Costume>? _soldCostumes = null;
 
 
         //constructor
@@ -23,7 +21,6 @@ namespace Services
         {
             _repository = repository;
 
-            _costumes = new List<Costume>();
 
 
             if (false)
@@ -124,27 +121,28 @@ namespace Services
 
         public List<CostumeResponse> GetAllSoldCostumes()
         {
-            return _soldCostumes.Select(costume => costume.ToCostumeResponse()).ToList();
+            //    return _soldCostumes.Select(costume => costume.ToCostumeResponse()).ToList();
+            return new List<CostumeResponse>();
         }
 
         public bool SoldCostumeByCostumeID(Guid? costumeID)
         {
-            if(costumeID == null) return false;
+        //    if(costumeID == null) return false;
 
-            Costume? soldCostume = _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID);
+        //    Costume? soldCostume = _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID);
 
-            if (soldCostume == null)
-            {
-                return false;
-            }
-            else
-            {
-                soldCostume.ExitDate = DateTime.Now;
-                _soldCostumes.Add(soldCostume);
-            }
+        //    if (soldCostume == null)
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        soldCostume.ExitDate = DateTime.Now;
+        //        _soldCostumes.Add(soldCostume);
+        //    }
 
-            _costumes.RemoveAll(costume => costume.CostumeID == costumeID);
-            return true;
+        //    _costumes.RemoveAll(costume => costume.CostumeID == costumeID);
+            return false;
 
         }
 

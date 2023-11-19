@@ -14,17 +14,13 @@ namespace Services
     public class ProductService : IProductsServices
     {
         //private fields 
-        private readonly List<Product> _productsList;
-        private readonly List<Product> _soldProductsList;
-
+        private readonly IRepository<Product> _repository;
 
         //constructor
-        public ProductService(bool init  = true)
+        public ProductService(IRepository<Product> repository)
         {
-            _productsList = new List<Product>();
-            _soldProductsList = new List<Product>();
-
-            if (init)
+            _repository = repository;
+            if (false)
             {
                 ProductAddRequest request1 = new ProductAddRequest()
                 {
@@ -108,7 +104,7 @@ namespace Services
             product.ProductID = Guid.NewGuid();
             product.EntryDate = DateTime.Now;
 
-            _productsList.Add(product);
+            _repository.Add(product);
 
             return product.ToProductResponse();
         }
@@ -117,37 +113,49 @@ namespace Services
         {
             if(productID == null) throw new ArgumentNullException(nameof(productID));
 
-            Product? prod = _productsList.FirstOrDefault(temp => temp.ProductID == productID);
+            Product? prod = _repository.GetById((Guid)productID);
 
             if (prod == null) return false;
 
-            return _productsList.Remove(prod);
+            _repository.Delete(prod);
+
+            return true;
         }
 
         public List<ProductResponse> GetAllProducts()
         {
-            return _productsList.Select(temp => temp.ToProductResponse()).ToList();
+            IEnumerable<Product> products = _repository.GetAll(1,100);
+
+            List<ProductResponse> toReturn = new List<ProductResponse>();
+
+            foreach (Product product in products)
+            {
+                toReturn.Add(product.ToProductResponse());
+            }
+
+            return toReturn;
         }
 
         public List<ProductResponse> GetAllSoldProducts()
         {
-            return _soldProductsList.Select(temp => temp.ToProductResponse()).ToList();
+            //return _soldProductsList.Select(temp => temp.ToProductResponse()).ToList();
+            return new List<ProductResponse>();
         }
 
         public bool SoldProductByProductID(Guid? guid)
         {
-            if (guid == null) throw new ArgumentNullException();
+            //if (guid == null) throw new ArgumentNullException();
 
-            Product? product = _productsList.FirstOrDefault(temp => temp.ProductID == guid);
+            //Product? product = _productsList.FirstOrDefault(temp => temp.ProductID == guid);
 
-            if (product == null) return false;
+            //if (product == null) return false;
 
-            _productsList.Remove(product);
-            product.ExitDate = DateTime.Now;
+            //_productsList.Remove(product);
+            //product.ExitDate = DateTime.Now;
 
-            _soldProductsList.Add(product);
+            //_soldProductsList.Add(product);
 
-            return true;
+            return false;
 
         }
 
@@ -198,7 +206,7 @@ namespace Services
         public ProductResponse? GetProductByProductID(Guid? productID)
         {
             if (productID == null) throw new ArgumentNullException(nameof(productID));
-            Product? response = _productsList.FirstOrDefault(temp => temp.ProductID == productID);
+            Product? response = _repository.GetById((Guid)productID);
 
             if (response == null) return null;
 
@@ -241,11 +249,10 @@ namespace Services
 
             ValidationHelper.ModelValidation(productUpdateRequest);
 
-            Product? product = _productsList.FirstOrDefault(temp => temp.ProductID == productUpdateRequest.ProductID);
+            Product? product = _repository.GetById(productUpdateRequest.ProductID);
 
             if (product == null) throw new ArgumentException("ID not found in DB");
 
-            //update product with update request
             product.ProductType = productUpdateRequest.ProductType.ToString();
             product.ProductDescription = productUpdateRequest.ProductDescription;
             product.Color = productUpdateRequest.Color;
@@ -256,6 +263,7 @@ namespace Services
             product.EntryDate = productUpdateRequest.EntryDate;
             product.ExitDate = productUpdateRequest.ExitDate;
 
+            _repository.Update(product);
 
             return product.ToProductResponse();
         }

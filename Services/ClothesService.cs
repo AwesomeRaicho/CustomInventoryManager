@@ -14,16 +14,14 @@ namespace Services
     public class ClothesService : IClothesService
     {
         //Private Fields
-        private readonly List<Clothes> _clothes;
-        private readonly List<Clothes> _soldClothes;
+        private readonly IRepository<Clothes> _repository;
 
         //Contructor
-        public ClothesService(bool init = true) 
+        public ClothesService(IRepository<Clothes> clothes) 
         { 
-            _clothes = new List<Clothes>();
-            _soldClothes = new List<Clothes>();
+            _repository = clothes;
 
-            if(init)
+            if(false)
             {
                 ClothesAddRequest request1 = new ClothesAddRequest()
                 {
@@ -98,17 +96,15 @@ namespace Services
             Clothes clothes = clothesAddRequest.ToClothes();
             clothes.ClothesID = Guid.NewGuid();
             clothes.EntryDate = DateTime.Now;
-            _clothes.Add(clothes);
+            _repository.Add(clothes);
 
             return clothes.ToClothesResponse();
-
-
         }
         public ClothesResponse? GetClothesByClothesID(Guid? guid)
         {
             if (guid == null) throw new ArgumentNullException();
 
-            Clothes? clothes = _clothes.FirstOrDefault(temp => temp.ClothesID == guid);
+            Clothes? clothes = _repository.GetById((Guid)guid);
             
             if (clothes == null) return null;
 
@@ -117,7 +113,15 @@ namespace Services
         }
         public List<ClothesResponse> GetAllClothes()
         {
-            return _clothes.Select(temp => temp.ToClothesResponse()).ToList();
+            IEnumerable<Clothes> clothes = _repository.GetAll(1, 100);
+            List<ClothesResponse> toReturn = new List<ClothesResponse>();
+
+            foreach(Clothes piece in clothes)
+            {
+                toReturn.Add(piece.ToClothesResponse());
+            }
+
+            return toReturn;
         }
 
 
@@ -125,31 +129,36 @@ namespace Services
         {
             if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Clothes? toRemove = _clothes.FirstOrDefault(temp => temp.ClothesID == guid);
+            Clothes? toRemove = _repository.GetById((Guid)guid);
             
             if(toRemove == null) return false;
 
-            return _clothes.Remove(toRemove);
+            _repository.Delete(toRemove);
+
+            return true;
         }
 
         public bool SoldClothesByClothesID(Guid? guid)
         {
-            if(guid == null) throw new ArgumentNullException(nameof(guid));
+            //if (guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Clothes? clothes = _clothes.FirstOrDefault(temp => temp.ClothesID == guid);
+            //Clothes? clothes = _clothes.FirstOrDefault(temp => temp.ClothesID == guid);
 
-            if (clothes == null) return false;
+            //if (clothes == null) return false;
 
-            clothes.ExitDate = DateTime.Now;
-            _soldClothes.Add(clothes);
+            //clothes.ExitDate = DateTime.Now;
+            //_soldClothes.Add(clothes);
 
-            return _clothes.Remove(clothes);
+            //return _clothes.Remove(clothes);
+            return false;
 
         }
 
         public List<ClothesResponse> GetAllSoldClothes()
         {
-            return _soldClothes.Select(temp => temp.ToClothesResponse()).ToList();
+
+            //return _soldClothes.Select(temp => temp.ToClothesResponse()).ToList();
+            return new List<ClothesResponse>();
         }
 
 
@@ -228,7 +237,7 @@ namespace Services
         {
             if(clothesUpdateRequest == null) throw new ArgumentNullException(nameof(clothesUpdateRequest));
 
-            Clothes? clothesResponse = _clothes.FirstOrDefault(temp => temp.ClothesID == clothesUpdateRequest.ClothesID);
+            Clothes? clothesResponse = _repository.GetById(clothesUpdateRequest.ClothesID);
 
             if(clothesResponse == null) throw new ArgumentNullException($"ClothesID does not have a match");
 
@@ -241,6 +250,9 @@ namespace Services
             clothesResponse.ExitDate = clothesUpdateRequest.ExitDate;
             clothesResponse.Size = clothesUpdateRequest.Size;
             clothesResponse.Theme = clothesUpdateRequest.Theme;
+
+
+            _repository.Update(clothesResponse);
 
             return clothesResponse.ToClothesResponse();
         }
