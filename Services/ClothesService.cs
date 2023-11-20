@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities;
+using Entities.Sold;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
 using Services.Helpers;
@@ -14,77 +15,80 @@ namespace Services
     public class ClothesService : IClothesService
     {
         //Private Fields
-        private readonly IRepository<Clothes> _repository;
+        private readonly IRepository<Clothes> _repo;
+        private readonly IRepository<SoldClothes> _soldRepo;
+
 
         //Contructor
-        public ClothesService(IRepository<Clothes> clothes) 
+        public ClothesService(IRepository<Clothes> clothes, IRepository<SoldClothes> soldRepo) 
         { 
-            _repository = clothes;
+            _repo = clothes;
+            _soldRepo = soldRepo;
 
-            if(false)
-            {
-                ClothesAddRequest request1 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Baptism,
-                    ClothesType = ClothesTypeOptions.Vestido,
-                    Gender = GenderOptions.Female,
-                    Model = "17",
-                    PurchasePrice = 155.23,
-                    Size = "8"
-                };
-                ClothesAddRequest request2 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Baptism,
-                    ClothesType = ClothesTypeOptions.Zapatos,
-                    Gender = GenderOptions.Male,
-                    Model = "Cupon",
-                    PurchasePrice = 200.00,
-                    Size = "3"
-                };
-                ClothesAddRequest request3 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Wedding,
-                    ClothesType = ClothesTypeOptions.Vestido,
-                    Gender = GenderOptions.Female,
-                    Model = "S23",
-                    PurchasePrice = 250.36,
-                    Size = "17"
-                };
-                ClothesAddRequest request4 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Other,
-                    ClothesType = ClothesTypeOptions.Ropon,
-                    Gender = GenderOptions.Female,
-                    Model = "2",
-                    PurchasePrice = 222.22,
-                    Size = "1"
-                };
-                ClothesAddRequest request5 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Other,
-                    ClothesType = ClothesTypeOptions.Misc,
-                    Gender = GenderOptions.Male,
-                    Model = "3.4",
-                    PurchasePrice = 36.00,
-                    Size = "2"
-                };
-                ClothesAddRequest request6 = new ClothesAddRequest()
-                {
-                    Theme = ThemeOptions.Communion,
-                    ClothesType = ClothesTypeOptions.Traje,
-                    Gender = GenderOptions.Male,
-                    Model = "5",
-                    PurchasePrice = 136.57,
-                    Size = "5"
-                };
-                this.AddClothes(request1);
-                this.AddClothes(request2);
-                this.AddClothes(request3);
-                this.AddClothes(request4);
-                this.AddClothes(request5);
-                this.AddClothes(request6);
+            //if(false)
+            //{
+            //    ClothesAddRequest request1 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Baptism,
+            //        ClothesType = ClothesTypeOptions.Vestido,
+            //        Gender = GenderOptions.Female,
+            //        Model = "17",
+            //        PurchasePrice = 155.23,
+            //        Size = "8"
+            //    };
+            //    ClothesAddRequest request2 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Baptism,
+            //        ClothesType = ClothesTypeOptions.Zapatos,
+            //        Gender = GenderOptions.Male,
+            //        Model = "Cupon",
+            //        PurchasePrice = 200.00,
+            //        Size = "3"
+            //    };
+            //    ClothesAddRequest request3 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Wedding,
+            //        ClothesType = ClothesTypeOptions.Vestido,
+            //        Gender = GenderOptions.Female,
+            //        Model = "S23",
+            //        PurchasePrice = 250.36,
+            //        Size = "17"
+            //    };
+            //    ClothesAddRequest request4 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Other,
+            //        ClothesType = ClothesTypeOptions.Ropon,
+            //        Gender = GenderOptions.Female,
+            //        Model = "2",
+            //        PurchasePrice = 222.22,
+            //        Size = "1"
+            //    };
+            //    ClothesAddRequest request5 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Other,
+            //        ClothesType = ClothesTypeOptions.Misc,
+            //        Gender = GenderOptions.Male,
+            //        Model = "3.4",
+            //        PurchasePrice = 36.00,
+            //        Size = "2"
+            //    };
+            //    ClothesAddRequest request6 = new ClothesAddRequest()
+            //    {
+            //        Theme = ThemeOptions.Communion,
+            //        ClothesType = ClothesTypeOptions.Traje,
+            //        Gender = GenderOptions.Male,
+            //        Model = "5",
+            //        PurchasePrice = 136.57,
+            //        Size = "5"
+            //    };
+            //    this.AddClothes(request1);
+            //    this.AddClothes(request2);
+            //    this.AddClothes(request3);
+            //    this.AddClothes(request4);
+            //    this.AddClothes(request5);
+            //    this.AddClothes(request6);
 
-            }
+            //}
         }
 
         public ClothesResponse AddClothes(ClothesAddRequest? clothesAddRequest)
@@ -96,7 +100,7 @@ namespace Services
             Clothes clothes = clothesAddRequest.ToClothes();
             clothes.ClothesID = Guid.NewGuid();
             clothes.EntryDate = DateTime.Now;
-            _repository.Add(clothes);
+            _repo.Add(clothes);
 
             return clothes.ToClothesResponse();
         }
@@ -104,7 +108,7 @@ namespace Services
         {
             if (guid == null) throw new ArgumentNullException();
 
-            Clothes? clothes = _repository.GetById((Guid)guid);
+            Clothes? clothes = _repo.GetById((Guid)guid);
             
             if (clothes == null) return null;
 
@@ -113,7 +117,7 @@ namespace Services
         }
         public List<ClothesResponse> GetAllClothes()
         {
-            IEnumerable<Clothes> clothes = _repository.GetAll(1, 100);
+            IEnumerable<Clothes> clothes = _repo.GetAll(1, 100);
             List<ClothesResponse> toReturn = new List<ClothesResponse>();
 
             foreach(Clothes piece in clothes)
@@ -129,36 +133,46 @@ namespace Services
         {
             if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Clothes? toRemove = _repository.GetById((Guid)guid);
+            Clothes? toRemove = _repo.GetById((Guid)guid);
             
             if(toRemove == null) return false;
 
-            _repository.Delete(toRemove);
+            _repo.Delete(toRemove);
 
             return true;
         }
 
         public bool SoldClothesByClothesID(Guid? guid)
         {
-            //if (guid == null) throw new ArgumentNullException(nameof(guid));
+            if (guid == null) throw new ArgumentNullException(nameof(guid));
 
-            //Clothes? clothes = _clothes.FirstOrDefault(temp => temp.ClothesID == guid);
+            Clothes? clothes = _repo.GetById((Guid)guid);
 
-            //if (clothes == null) return false;
+            if (clothes == null) return false;
 
-            //clothes.ExitDate = DateTime.Now;
-            //_soldClothes.Add(clothes);
 
-            //return _clothes.Remove(clothes);
-            return false;
+            clothes.ExitDate = DateTime.Now;
+
+            _repo.Delete(clothes);
+
+            _soldRepo.Add(clothes.ToSoldClothes());
+
+            return true;
 
         }
 
         public List<ClothesResponse> GetAllSoldClothes()
         {
+            List<ClothesResponse> toReturn = new List<ClothesResponse>();
 
-            //return _soldClothes.Select(temp => temp.ToClothesResponse()).ToList();
-            return new List<ClothesResponse>();
+            IEnumerable<SoldClothes> clothes = _soldRepo.GetAll(1, 100);
+
+            foreach(SoldClothes piece in clothes)
+            {
+                toReturn.Add(piece.ToClothes().ToClothesResponse());
+            }
+
+            return toReturn;
         }
 
 
@@ -237,7 +251,7 @@ namespace Services
         {
             if(clothesUpdateRequest == null) throw new ArgumentNullException(nameof(clothesUpdateRequest));
 
-            Clothes? clothesResponse = _repository.GetById(clothesUpdateRequest.ClothesID);
+            Clothes? clothesResponse = _repo.GetById(clothesUpdateRequest.ClothesID);
 
             if(clothesResponse == null) throw new ArgumentNullException($"ClothesID does not have a match");
 
@@ -252,7 +266,7 @@ namespace Services
             clothesResponse.Theme = clothesUpdateRequest.Theme;
 
 
-            _repository.Update(clothesResponse);
+            _repo.Update(clothesResponse);
 
             return clothesResponse.ToClothesResponse();
         }

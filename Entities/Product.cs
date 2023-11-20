@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Sold;
 
 namespace Entities
 {
@@ -18,5 +19,23 @@ namespace Entities
         public double? PurchasePrice { get; set; }
         public DateTime? EntryDate { get; set; }
         public DateTime? ExitDate { get; set; }
+
+        public SoldProduct ToSoldProduct()
+        {
+            return new SoldProduct()
+            {
+                SoldProductID = ProductID,
+                ProductType = ProductType,
+                ProductDescription = ProductDescription,
+                Color = Color,
+                Theme = Theme,
+                Gender = Gender,
+                Size = Size,
+                PurchasePrice = PurchasePrice,
+                EntryDate = EntryDate,
+                ExitDate = ExitDate,
+            };
+        }
     }
+
 }

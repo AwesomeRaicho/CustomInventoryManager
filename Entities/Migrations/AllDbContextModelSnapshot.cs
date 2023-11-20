@@ -126,6 +126,111 @@ namespace Entities.Migrations
 
                     b.ToTable("Products");
                 });
+
+            modelBuilder.Entity("Entities.Sold.SoldClothes", b =>
+                {
+                    b.Property<Guid>("SoldClothesID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClothesType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PurchasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Theme")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SoldClothesID");
+
+                    b.ToTable("SoldClothes");
+                });
+
+            modelBuilder.Entity("Entities.Sold.SoldCostume", b =>
+                {
+                    b.Property<Guid>("SoldCostumeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CostumeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PurchasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SoldCostumeID");
+
+                    b.ToTable("SoldCostumes");
+                });
+
+            modelBuilder.Entity("Entities.Sold.SoldProduct", b =>
+                {
+                    b.Property<Guid>("SoldProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExitDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PurchasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Theme")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SoldProductID");
+
+                    b.ToTable("SoldProducts");
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Entities.Sold;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,19 @@ namespace Entities
         public DbSet<Costume> Costumes{ get; set; }
         public DbSet<Product> Products{ get; set; }
 
+        //Archive Tables
+        public DbSet<SoldClothes> SoldClothes { get; set; }
+        public DbSet<SoldCostume> SoldCostumes { get; set; }
+        public DbSet<SoldProduct> SoldProducts { get; set; }
+
+
+
+
         public AllDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //move connection string to configuration
-            //optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=CustomStoreDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+
 
         }
 

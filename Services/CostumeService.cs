@@ -1,5 +1,6 @@
 ﻿
 using Entities;
+using Entities.Sold;
 using Microsoft.VisualBasic.FileIO;
 using ServicesContracts;
 using Services.Helpers;
@@ -12,66 +13,67 @@ namespace Services
     public class CostumeService : ICostumeService
     {
         //private fields
-        IRepository<Costume> _repository;
-        
+        private readonly IRepository<Costume> _repo;
+        private readonly IRepository<SoldCostume> _soldRepo;
+
 
 
         //constructor
-        public CostumeService( IRepository<Costume> repository, bool init = true)
+        public CostumeService( IRepository<Costume> repository, IRepository<SoldCostume> soldRepo)
         {
-            _repository = repository;
+            _repo = repository;
+            _soldRepo = soldRepo;
 
 
+            //if (false)
+            //{
+            //    CostumeAddRequest request1 = new CostumeAddRequest()
+            //    {
+            //        CostumeName = "wonda Woman",
+            //        Gender = GenderOptions.Female,
+            //        Age = "8",
+            //        Size = "8",
+            //        PurchasePrice = 150.00,
+            //    };
+            //    CostumeAddRequest request2 = new CostumeAddRequest()
+            //    {
+            //        CostumeName = "Batman",
+            //        Gender = GenderOptions.Male,
+            //        Age = "10",
+            //        Size = "10",
+            //        PurchasePrice = 200.00,
+            //    };
+            //    CostumeAddRequest request3 = new CostumeAddRequest()
+            //    {
+            //        CostumeName = "Supaman",
+            //        Gender = GenderOptions.Male,
+            //        Age = "13",
+            //        Size = "16",
+            //        PurchasePrice = 89.99,
+            //    };
+            //    CostumeAddRequest request4 = new CostumeAddRequest()
+            //    {
+            //        CostumeName = "Super Girl",
+            //        Gender = GenderOptions.Female,
+            //        Age = "10",
+            //        Size = "10",
+            //        PurchasePrice = 122.22,
+            //    };
+            //    CostumeAddRequest request5 = new CostumeAddRequest()
+            //    {
+            //        CostumeName = "Flash",
+            //        Gender = GenderOptions.Male,
+            //        Age = "15",
+            //        Size = "15",
+            //        PurchasePrice = 175.00,
+            //    };
 
-            if (false)
-            {
-                CostumeAddRequest request1 = new CostumeAddRequest()
-                {
-                    CostumeName = "wonda Woman",
-                    Gender = GenderOptions.Female,
-                    Age = "8",
-                    Size = "8",
-                    PurchasePrice = 150.00,
-                };
-                CostumeAddRequest request2 = new CostumeAddRequest()
-                {
-                    CostumeName = "Batman",
-                    Gender = GenderOptions.Male,
-                    Age = "10",
-                    Size = "10",
-                    PurchasePrice = 200.00,
-                };
-                CostumeAddRequest request3 = new CostumeAddRequest()
-                {
-                    CostumeName = "Supaman",
-                    Gender = GenderOptions.Male,
-                    Age = "13",
-                    Size = "16",
-                    PurchasePrice = 89.99,
-                };
-                CostumeAddRequest request4 = new CostumeAddRequest()
-                {
-                    CostumeName = "Super Girl",
-                    Gender = GenderOptions.Female,
-                    Age = "10",
-                    Size = "10",
-                    PurchasePrice = 122.22,
-                };
-                CostumeAddRequest request5 = new CostumeAddRequest()
-                {
-                    CostumeName = "Flash",
-                    Gender = GenderOptions.Male,
-                    Age = "15",
-                    Size = "15",
-                    PurchasePrice = 175.00,
-                };
-
-                AddCostume(request1);
-                AddCostume(request2);
-                AddCostume(request3);
-                AddCostume(request4);
-                AddCostume(request5);
-            }
+            //    AddCostume(request1);
+            //    AddCostume(request2);
+            //    AddCostume(request3);
+            //    AddCostume(request4);
+            //    AddCostume(request5);
+            //}
         }
 
 
@@ -89,7 +91,7 @@ namespace Services
             costume.CostumeID = Guid.NewGuid();
             costume.EntryDate = DateTime.Now;
 
-            _repository.Add(costume);
+            _repo.Add(costume);
 
             return costume.ToCostumeResponse();
 
@@ -98,7 +100,7 @@ namespace Services
         {
             List<CostumeResponse> costumes = new List<CostumeResponse>();
 
-            IEnumerable<Costume> fromRepo =  _repository.GetAll(1 , 100);
+            IEnumerable<Costume> fromRepo =  _repo.GetAll(1 , 100);
 
             foreach (Costume costume in fromRepo)
             {
@@ -111,7 +113,7 @@ namespace Services
         {
             if (costumeID == null) return null;
 
-            Costume? costume = _repository.GetById((Guid)costumeID);
+            Costume? costume = _repo.GetById((Guid)costumeID);
 
             if (costume == null) return null;
 
@@ -121,28 +123,38 @@ namespace Services
 
         public List<CostumeResponse> GetAllSoldCostumes()
         {
-            //    return _soldCostumes.Select(costume => costume.ToCostumeResponse()).ToList();
-            return new List<CostumeResponse>();
+            List<CostumeResponse> toReturn = new List<CostumeResponse>();
+
+            IEnumerable<SoldCostume> soldCostumes = _soldRepo.GetAll(1 , 100);
+
+            foreach(SoldCostume costume in soldCostumes)
+            {
+                toReturn.Add(costume.ToCostume().ToCostumeResponse());
+            }
+
+            return toReturn;
         }
 
         public bool SoldCostumeByCostumeID(Guid? costumeID)
         {
-        //    if(costumeID == null) return false;
+            if (costumeID == null) return false;
 
-        //    Costume? soldCostume = _costumes.FirstOrDefault(costume => costume.CostumeID == costumeID);
+            Costume? soldCostume = _repo.GetById((Guid)costumeID);
 
-        //    if (soldCostume == null)
-        //    {
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        soldCostume.ExitDate = DateTime.Now;
-        //        _soldCostumes.Add(soldCostume);
-        //    }
+            if (soldCostume == null)
+            {
+                return false;
+            }
+            else
+            {
+                soldCostume.ExitDate = DateTime.Now;
+                _repo.Delete(soldCostume);
 
-        //    _costumes.RemoveAll(costume => costume.CostumeID == costumeID);
-            return false;
+                _soldRepo.Add(soldCostume.ToSoldCostume());
+                return true;
+            }
+
+            
 
         }
 
@@ -199,7 +211,7 @@ namespace Services
         {
             if(costumeID == null) throw new ArgumentNullException(nameof(costumeID));
 
-            Costume? toRemove = _repository.GetById((Guid)costumeID);
+            Costume? toRemove = _repo.GetById((Guid)costumeID);
 
             if(toRemove == null)
             {
@@ -207,7 +219,7 @@ namespace Services
             }
             else
             {
-                _repository.Delete(toRemove);
+                _repo.Delete(toRemove);
 
                 return true;
             }
@@ -247,7 +259,7 @@ namespace Services
 
             ValidationHelper.ModelValidation(costumeUpdateRequest);
 
-            Costume? costume = _repository.GetById(costumeUpdateRequest.CostumeID);
+            Costume? costume = _repo.GetById(costumeUpdateRequest.CostumeID);
 
 
 
@@ -262,7 +274,7 @@ namespace Services
             costume.ExitDate = costumeUpdateRequest.ExitDate;
             costume.Size = costumeUpdateRequest.Size;
 
-            _repository.Update(costume);
+            _repo.Update(costume);
 
             return costume.ToCostumeResponse();
         }

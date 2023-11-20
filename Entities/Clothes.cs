@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Sold;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,21 @@ namespace Entities
         public double? PurchasePrice { get; set; }
         public DateTime? EntryDate { get; set; }
         public DateTime? ExitDate { get; set; }
+
+        public SoldClothes ToSoldClothes()
+        {
+            return new SoldClothes() 
+            {
+                SoldClothesID = ClothesID,
+                Theme = Theme,
+                ClothesType = ClothesType,
+                Model = Model,
+                Gender = Gender,
+                Size = Size,
+                PurchasePrice = PurchasePrice,
+                EntryDate = EntryDate,
+                ExitDate = ExitDate,
+            };
+        }
     }
 }

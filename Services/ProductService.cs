@@ -8,88 +8,93 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Services.Helpers;
+using Entities.Sold;
 
 namespace Services
 {
     public class ProductService : IProductsServices
     {
         //private fields 
-        private readonly IRepository<Product> _repository;
+        private readonly IRepository<Product> _repo;
+        private readonly IRepository<SoldProduct> _soldRepo;
 
         //constructor
-        public ProductService(IRepository<Product> repository)
+        public ProductService(IRepository<Product> repository, IRepository<SoldProduct> soldRepo)
         {
-            _repository = repository;
-            if (false)
-            {
-                ProductAddRequest request1 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Arras,
-                    Color = "Gold",
-                    Gender = GenderOptions.Other,
-                    Size = "3",
-                    Theme = ThemeOptions.Wedding,
-                    PurchasePrice = 100.00,
-                    ProductDescription = "coins for wedding"
-                };
-                ProductAddRequest request2 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Bow,
-                    Color = "Red",
-                    Gender = GenderOptions.Female,
-                    Size = "small",
-                    Theme = ThemeOptions.Other,
-                    PurchasePrice = 30.00,
-                    ProductDescription = "regular bow"
-                };
-                ProductAddRequest request3 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Underwear,
-                    Color = "white",
-                    Gender = GenderOptions.Female,
-                    Size = "medium",
-                    Theme = ThemeOptions.Other,
-                    PurchasePrice = 35.00,
-                    ProductDescription = "calsones"
-                };
-                ProductAddRequest request4 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Arras,
-                    Color = "Gold",
-                    Gender = GenderOptions.Other,
-                    Size = "5",
-                    Theme = ThemeOptions.Wedding,
-                    PurchasePrice = 100.00,
-                    ProductDescription = "coins for wedding"
-                };
-                ProductAddRequest request5 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Valerina,
-                    Color = "Gray",
-                    Gender = GenderOptions.Female,
-                    Size = "7",
-                    Theme = ThemeOptions.Other,
-                    PurchasePrice = 50,
-                    ProductDescription = ""
-                };
-                ProductAddRequest request6 = new ProductAddRequest()
-                {
-                    ProductType = ProductTypeOptions.Candles,
-                    Color = "blue",
-                    Gender = GenderOptions.Other,
-                    Size = "large",
-                    Theme = ThemeOptions.Communion,
-                    PurchasePrice = 15.00,
-                    ProductDescription = "Velas"
-                };
+            _repo = repository;
+            _soldRepo = soldRepo;
 
-                this.AddProduct(request1);
-                this.AddProduct(request2);
-                this.AddProduct(request3);
-                this.AddProduct(request4);
-                this.AddProduct(request5);
-                this.AddProduct(request6);
-            }
+
+            //if (false)
+            //{
+            //    ProductAddRequest request1 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Arras,
+            //        Color = "Gold",
+            //        Gender = GenderOptions.Other,
+            //        Size = "3",
+            //        Theme = ThemeOptions.Wedding,
+            //        PurchasePrice = 100.00,
+            //        ProductDescription = "coins for wedding"
+            //    };
+            //    ProductAddRequest request2 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Bow,
+            //        Color = "Red",
+            //        Gender = GenderOptions.Female,
+            //        Size = "small",
+            //        Theme = ThemeOptions.Other,
+            //        PurchasePrice = 30.00,
+            //        ProductDescription = "regular bow"
+            //    };
+            //    ProductAddRequest request3 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Underwear,
+            //        Color = "white",
+            //        Gender = GenderOptions.Female,
+            //        Size = "medium",
+            //        Theme = ThemeOptions.Other,
+            //        PurchasePrice = 35.00,
+            //        ProductDescription = "calsones"
+            //    };
+            //    ProductAddRequest request4 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Arras,
+            //        Color = "Gold",
+            //        Gender = GenderOptions.Other,
+            //        Size = "5",
+            //        Theme = ThemeOptions.Wedding,
+            //        PurchasePrice = 100.00,
+            //        ProductDescription = "coins for wedding"
+            //    };
+            //    ProductAddRequest request5 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Valerina,
+            //        Color = "Gray",
+            //        Gender = GenderOptions.Female,
+            //        Size = "7",
+            //        Theme = ThemeOptions.Other,
+            //        PurchasePrice = 50,
+            //        ProductDescription = ""
+            //    };
+            //    ProductAddRequest request6 = new ProductAddRequest()
+            //    {
+            //        ProductType = ProductTypeOptions.Candles,
+            //        Color = "blue",
+            //        Gender = GenderOptions.Other,
+            //        Size = "large",
+            //        Theme = ThemeOptions.Communion,
+            //        PurchasePrice = 15.00,
+            //        ProductDescription = "Velas"
+            //    };
+
+            //    this.AddProduct(request1);
+            //    this.AddProduct(request2);
+            //    this.AddProduct(request3);
+            //    this.AddProduct(request4);
+            //    this.AddProduct(request5);
+            //    this.AddProduct(request6);
+            //}
         }
 
 
@@ -104,7 +109,7 @@ namespace Services
             product.ProductID = Guid.NewGuid();
             product.EntryDate = DateTime.Now;
 
-            _repository.Add(product);
+            _repo.Add(product);
 
             return product.ToProductResponse();
         }
@@ -113,18 +118,18 @@ namespace Services
         {
             if(productID == null) throw new ArgumentNullException(nameof(productID));
 
-            Product? prod = _repository.GetById((Guid)productID);
+            Product? prod = _repo.GetById((Guid)productID);
 
             if (prod == null) return false;
 
-            _repository.Delete(prod);
+            _repo.Delete(prod);
 
             return true;
         }
 
         public List<ProductResponse> GetAllProducts()
         {
-            IEnumerable<Product> products = _repository.GetAll(1,100);
+            IEnumerable<Product> products = _repo.GetAll(1,100);
 
             List<ProductResponse> toReturn = new List<ProductResponse>();
 
@@ -138,25 +143,32 @@ namespace Services
 
         public List<ProductResponse> GetAllSoldProducts()
         {
-            //return _soldProductsList.Select(temp => temp.ToProductResponse()).ToList();
-            return new List<ProductResponse>();
+            List<ProductResponse> toReturn = new List<ProductResponse>();
+            IEnumerable<SoldProduct> soldProducts = _soldRepo.GetAll(1,100);
+
+            foreach (SoldProduct product in soldProducts)
+            {
+                toReturn.Add(product.ToProduct().ToProductResponse());
+            }
+
+            return toReturn;
+
         }
 
         public bool SoldProductByProductID(Guid? guid)
         {
-            //if (guid == null) throw new ArgumentNullException();
+            if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-            //Product? product = _productsList.FirstOrDefault(temp => temp.ProductID == guid);
+            Product? toRemove = _repo.GetById((Guid)guid);
 
-            //if (product == null) return false;
+            if (toRemove == null) return false;
 
-            //_productsList.Remove(product);
-            //product.ExitDate = DateTime.Now;
+            toRemove.ExitDate = DateTime.Now;
 
-            //_soldProductsList.Add(product);
+            _repo.Delete(toRemove);
+            _soldRepo.Add(toRemove.ToSoldProduct());
 
-            return false;
-
+            return true;
         }
 
         public List<ProductResponse> GetFilteredProduct(string filterBy, string? filterString)
@@ -206,7 +218,7 @@ namespace Services
         public ProductResponse? GetProductByProductID(Guid? productID)
         {
             if (productID == null) throw new ArgumentNullException(nameof(productID));
-            Product? response = _repository.GetById((Guid)productID);
+            Product? response = _repo.GetById((Guid)productID);
 
             if (response == null) return null;
 
@@ -249,7 +261,7 @@ namespace Services
 
             ValidationHelper.ModelValidation(productUpdateRequest);
 
-            Product? product = _repository.GetById(productUpdateRequest.ProductID);
+            Product? product = _repo.GetById(productUpdateRequest.ProductID);
 
             if (product == null) throw new ArgumentException("ID not found in DB");
 
@@ -263,7 +275,7 @@ namespace Services
             product.EntryDate = productUpdateRequest.EntryDate;
             product.ExitDate = productUpdateRequest.ExitDate;
 
-            _repository.Update(product);
+            _repo.Update(product);
 
             return product.ToProductResponse();
         }
