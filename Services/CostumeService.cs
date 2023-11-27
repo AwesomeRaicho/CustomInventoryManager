@@ -23,61 +23,10 @@ namespace Services
         {
             _repo = repository;
             _soldRepo = soldRepo;
-
-
-            //if (false)
-            //{
-            //    CostumeAddRequest request1 = new CostumeAddRequest()
-            //    {
-            //        CostumeName = "wonda Woman",
-            //        Gender = GenderOptions.Female,
-            //        Age = "8",
-            //        Size = "8",
-            //        PurchasePrice = 150.00,
-            //    };
-            //    CostumeAddRequest request2 = new CostumeAddRequest()
-            //    {
-            //        CostumeName = "Batman",
-            //        Gender = GenderOptions.Male,
-            //        Age = "10",
-            //        Size = "10",
-            //        PurchasePrice = 200.00,
-            //    };
-            //    CostumeAddRequest request3 = new CostumeAddRequest()
-            //    {
-            //        CostumeName = "Supaman",
-            //        Gender = GenderOptions.Male,
-            //        Age = "13",
-            //        Size = "16",
-            //        PurchasePrice = 89.99,
-            //    };
-            //    CostumeAddRequest request4 = new CostumeAddRequest()
-            //    {
-            //        CostumeName = "Super Girl",
-            //        Gender = GenderOptions.Female,
-            //        Age = "10",
-            //        Size = "10",
-            //        PurchasePrice = 122.22,
-            //    };
-            //    CostumeAddRequest request5 = new CostumeAddRequest()
-            //    {
-            //        CostumeName = "Flash",
-            //        Gender = GenderOptions.Male,
-            //        Age = "15",
-            //        Size = "15",
-            //        PurchasePrice = 175.00,
-            //    };
-
-            //    AddCostume(request1);
-            //    AddCostume(request2);
-            //    AddCostume(request3);
-            //    AddCostume(request4);
-            //    AddCostume(request5);
-            //}
         }
 
 
-        public CostumeResponse AddCostume(CostumeAddRequest? costumeAddRequest)
+        public async Task<CostumeResponse>  AddCostume(CostumeAddRequest? costumeAddRequest)
         {
             //validation
             if (costumeAddRequest == null) throw new ArgumentNullException();
@@ -91,16 +40,16 @@ namespace Services
             costume.CostumeID = Guid.NewGuid();
             costume.EntryDate = DateTime.Now;
 
-            _repo.Add(costume);
+            await _repo.Add(costume);
 
             return costume.ToCostumeResponse();
 
         }
-        public List<CostumeResponse> GetAllCostumes()
+        public async Task<List<CostumeResponse>>  GetAllCostumes()
         {
             List<CostumeResponse> costumes = new List<CostumeResponse>();
 
-            IEnumerable<Costume> fromRepo =  _repo.GetAll(1 , 100);
+            IEnumerable<Costume> fromRepo = await _repo.GetAll(1 , 100);
 
             foreach (Costume costume in fromRepo)
             {
@@ -109,11 +58,11 @@ namespace Services
 
             return costumes;
         }
-        public CostumeResponse? GetCostumeByCostumeID(Guid? costumeID)
+        public async Task<CostumeResponse?>  GetCostumeByCostumeID(Guid? costumeID)
         {
             if (costumeID == null) return null;
 
-            Costume? costume = _repo.GetById((Guid)costumeID);
+            Costume? costume = await _repo.GetById((Guid)costumeID);
 
             if (costume == null) return null;
 
@@ -121,11 +70,11 @@ namespace Services
             return costume.ToCostumeResponse();
         }
 
-        public List<CostumeResponse> GetAllSoldCostumes()
+        public async Task<List<CostumeResponse>>  GetAllSoldCostumes()
         {
             List<CostumeResponse> toReturn = new List<CostumeResponse>();
 
-            IEnumerable<SoldCostume> soldCostumes = _soldRepo.GetAll(1 , 100);
+            IEnumerable<SoldCostume> soldCostumes = await _soldRepo.GetAll(1 , 100);
 
             foreach(SoldCostume costume in soldCostumes)
             {
@@ -135,11 +84,11 @@ namespace Services
             return toReturn;
         }
 
-        public bool SoldCostumeByCostumeID(Guid? costumeID)
+        public async Task<bool>  SoldCostumeByCostumeID(Guid? costumeID)
         {
             if (costumeID == null) return false;
 
-            Costume? soldCostume = _repo.GetById((Guid)costumeID);
+            Costume? soldCostume = await _repo.GetById((Guid)costumeID);
 
             if (soldCostume == null)
             {
@@ -148,9 +97,9 @@ namespace Services
             else
             {
                 soldCostume.ExitDate = DateTime.Now;
-                _repo.Delete(soldCostume);
+                await _repo.Delete(soldCostume);
 
-                _soldRepo.Add(soldCostume.ToSoldCostume());
+                await _soldRepo.Add(soldCostume.ToSoldCostume());
                 return true;
             }
 
@@ -159,9 +108,9 @@ namespace Services
         }
 
 
-        public List<CostumeResponse> GetFilteredCostumes(string filterBy, string? searchString)
+        public async Task<List<CostumeResponse>>  GetFilteredCostumes(string filterBy, string? searchString)
         {
-            List<CostumeResponse> allCostumes = GetAllCostumes();
+            List<CostumeResponse> allCostumes = await GetAllCostumes();
             List<CostumeResponse> matchingCostumes = allCostumes;
 
             if(string.IsNullOrEmpty(filterBy) || string.IsNullOrEmpty(searchString))
@@ -207,11 +156,11 @@ namespace Services
 
             return matchingCostumes;
         }
-        public bool DeleteCostume(Guid? costumeID)
+        public async Task<bool> DeleteCostume(Guid? costumeID)
         {
             if(costumeID == null) throw new ArgumentNullException(nameof(costumeID));
 
-            Costume? toRemove = _repo.GetById((Guid)costumeID);
+            Costume? toRemove = await _repo.GetById((Guid)costumeID);
 
             if(toRemove == null)
             {
@@ -219,14 +168,14 @@ namespace Services
             }
             else
             {
-                _repo.Delete(toRemove);
+                await _repo.Delete(toRemove);
 
                 return true;
             }
 
         }
 
-        public List<CostumeResponse> GetSortedCostumes(List<CostumeResponse> allCostumes, string orderBy, SortOrderOptions sortOrder)
+        public async Task<List<CostumeResponse>>  GetSortedCostumes(List<CostumeResponse> allCostumes, string orderBy, SortOrderOptions sortOrder)
         {
             if (string.IsNullOrEmpty(orderBy)) return allCostumes;
 
@@ -253,13 +202,13 @@ namespace Services
             return OrderedCostumes;
         }
 
-        public CostumeResponse UpdateCostume(CostumeUpdateRequest? costumeUpdateRequest)
+        public async Task<CostumeResponse> UpdateCostume(CostumeUpdateRequest? costumeUpdateRequest)
         {
             if (costumeUpdateRequest == null) throw new ArgumentNullException(nameof(costumeUpdateRequest));
 
             ValidationHelper.ModelValidation(costumeUpdateRequest);
 
-            Costume? costume = _repo.GetById(costumeUpdateRequest.CostumeID);
+            Costume? costume = await _repo.GetById(costumeUpdateRequest.CostumeID);
 
 
 
@@ -274,7 +223,7 @@ namespace Services
             costume.ExitDate = costumeUpdateRequest.ExitDate;
             costume.Size = costumeUpdateRequest.Size;
 
-            _repo.Update(costume);
+            await _repo.Update(costume);
 
             return costume.ToCostumeResponse();
         }

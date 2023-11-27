@@ -19,7 +19,7 @@ namespace CustomStoreDB.Controllers
 
 
         [Route("clothes")]
-        public IActionResult Clothes(string filterBy, string? searchString, string orderBy = nameof(ClothesResponse.Model), SortOrderOptions sortOrder = SortOrderOptions.ASC)
+        public async Task<IActionResult>  Clothes(string filterBy, string? searchString, string orderBy = nameof(ClothesResponse.Model), SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
             ViewBag.CurrentFilterBy = filterBy;
             ViewBag.CurrentSearchString = searchString;
@@ -35,16 +35,16 @@ namespace CustomStoreDB.Controllers
                 {nameof(ClothesResponse.Size), "Size" }
             };
 
-            List<ClothesResponse> clothes = _clothesService.GetFilteredClothes(filterBy, searchString);
+            List<ClothesResponse> clothes = await _clothesService.GetFilteredClothes(filterBy, searchString);
 
-            List<ClothesResponse> orderedClothes = _clothesService.GetSortedClothes(clothes, orderBy, sortOrder);
+            List<ClothesResponse> orderedClothes = await _clothesService.GetSortedClothes(clothes, orderBy, sortOrder);
 
             return View(orderedClothes);
         }
 
         [Route("clothes/create")]
         [HttpGet]
-        public IActionResult CreateClothes()
+        public IActionResult  CreateClothes()
         {
 
             return View();
@@ -52,7 +52,7 @@ namespace CustomStoreDB.Controllers
 
         [Route("clothes/create")]
         [HttpPost]
-        public IActionResult CreateClothes(ClothesAddRequest clothesAddRequest)
+        public async Task<IActionResult> CreateClothes(ClothesAddRequest clothesAddRequest)
         {
             if(!ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace CustomStoreDB.Controllers
                 return View();
             }
 
-            _clothesService.AddClothes(clothesAddRequest);
+            await _clothesService.AddClothes(clothesAddRequest);
             return RedirectToAction("Clothes");
         }
 
@@ -69,9 +69,9 @@ namespace CustomStoreDB.Controllers
 
         [Route("clothes/edit")]
         [HttpGet]
-        public IActionResult Edit(Guid clothesID)
+        public async Task<IActionResult>  Edit(Guid clothesID)
         {
-            ClothesResponse? clothes = _clothesService.GetClothesByClothesID(clothesID);
+            ClothesResponse? clothes = await _clothesService.GetClothesByClothesID(clothesID);
 
             if(clothes == null)
             {
@@ -85,7 +85,7 @@ namespace CustomStoreDB.Controllers
 
         [Route("clothes/edit")]
         [HttpPost]
-        public IActionResult Edit(ClothesUpdateRequest clothesUpdateRequest)
+        public async Task<IActionResult>  Edit(ClothesUpdateRequest clothesUpdateRequest)
         {
             //NEED TO RETURN ERRORS IF MODEL IS NOT CORRECT
             if(!ModelState.IsValid)
@@ -97,16 +97,16 @@ namespace CustomStoreDB.Controllers
 
 
 
-            _clothesService.UpdateClothes(clothesUpdateRequest);
+            await _clothesService.UpdateClothes(clothesUpdateRequest);
 
             return RedirectToAction("clothes");
         }
 
         [Route("clothes/delete")]
         [HttpGet]
-        public IActionResult Delete(Guid clothesID)
+        public async Task<IActionResult>  Delete(Guid clothesID)
         {
-            ClothesResponse? response = _clothesService.GetClothesByClothesID(clothesID);
+            ClothesResponse? response = await _clothesService.GetClothesByClothesID(clothesID);
 
             if(response == null)
             {
@@ -119,10 +119,10 @@ namespace CustomStoreDB.Controllers
 
         [Route("clothes/delete")]
         [HttpPost]
-        public IActionResult Delete(ClothesResponse clothesResponse)
+        public async Task<IActionResult>  Delete(ClothesResponse clothesResponse)
         {
 
-            _clothesService.DeleteClothes(clothesResponse.ClothesID);
+            await _clothesService.DeleteClothes(clothesResponse.ClothesID);
 
             return RedirectToAction("clothes");
         }

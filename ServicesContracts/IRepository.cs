@@ -8,10 +8,10 @@ namespace ServicesContracts
 {
     public interface IRepository<T> where T : class
     {
-        public T? GetById(Guid guid);
-        public IEnumerable<T> GetAll(int page, int pageSize);
-        public void Add(T entity);
-        public void Update(T entity);
-        public void Delete(T entity);
+        public  Task<T?> GetById(Guid guid);
+        public Task<IEnumerable<T>> GetAll(int page, int pageSize);
+        public  Task Add(T entity);
+        public  Task Update(T entity);
+        public  Task Delete(T entity);
     }
 }

@@ -25,73 +25,10 @@ namespace Services
             _repo = clothes;
             _soldRepo = soldRepo;
 
-            //if(false)
-            //{
-            //    ClothesAddRequest request1 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Baptism,
-            //        ClothesType = ClothesTypeOptions.Vestido,
-            //        Gender = GenderOptions.Female,
-            //        Model = "17",
-            //        PurchasePrice = 155.23,
-            //        Size = "8"
-            //    };
-            //    ClothesAddRequest request2 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Baptism,
-            //        ClothesType = ClothesTypeOptions.Zapatos,
-            //        Gender = GenderOptions.Male,
-            //        Model = "Cupon",
-            //        PurchasePrice = 200.00,
-            //        Size = "3"
-            //    };
-            //    ClothesAddRequest request3 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Wedding,
-            //        ClothesType = ClothesTypeOptions.Vestido,
-            //        Gender = GenderOptions.Female,
-            //        Model = "S23",
-            //        PurchasePrice = 250.36,
-            //        Size = "17"
-            //    };
-            //    ClothesAddRequest request4 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Other,
-            //        ClothesType = ClothesTypeOptions.Ropon,
-            //        Gender = GenderOptions.Female,
-            //        Model = "2",
-            //        PurchasePrice = 222.22,
-            //        Size = "1"
-            //    };
-            //    ClothesAddRequest request5 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Other,
-            //        ClothesType = ClothesTypeOptions.Misc,
-            //        Gender = GenderOptions.Male,
-            //        Model = "3.4",
-            //        PurchasePrice = 36.00,
-            //        Size = "2"
-            //    };
-            //    ClothesAddRequest request6 = new ClothesAddRequest()
-            //    {
-            //        Theme = ThemeOptions.Communion,
-            //        ClothesType = ClothesTypeOptions.Traje,
-            //        Gender = GenderOptions.Male,
-            //        Model = "5",
-            //        PurchasePrice = 136.57,
-            //        Size = "5"
-            //    };
-            //    this.AddClothes(request1);
-            //    this.AddClothes(request2);
-            //    this.AddClothes(request3);
-            //    this.AddClothes(request4);
-            //    this.AddClothes(request5);
-            //    this.AddClothes(request6);
-
-            //}
+            
         }
 
-        public ClothesResponse AddClothes(ClothesAddRequest? clothesAddRequest)
+        public async Task<ClothesResponse>  AddClothes(ClothesAddRequest? clothesAddRequest)
         {
             if(clothesAddRequest == null) throw new ArgumentNullException(nameof(clothesAddRequest));
 
@@ -100,24 +37,24 @@ namespace Services
             Clothes clothes = clothesAddRequest.ToClothes();
             clothes.ClothesID = Guid.NewGuid();
             clothes.EntryDate = DateTime.Now;
-            _repo.Add(clothes);
+            await _repo.Add(clothes);
 
             return clothes.ToClothesResponse();
         }
-        public ClothesResponse? GetClothesByClothesID(Guid? guid)
+        public async Task<ClothesResponse?>  GetClothesByClothesID(Guid? guid)
         {
             if (guid == null) throw new ArgumentNullException();
 
-            Clothes? clothes = _repo.GetById((Guid)guid);
+            Clothes? clothes = await _repo.GetById((Guid)guid);
             
             if (clothes == null) return null;
 
             return clothes.ToClothesResponse();
 
         }
-        public List<ClothesResponse> GetAllClothes()
+        public async Task<List<ClothesResponse>>  GetAllClothes()
         {
-            IEnumerable<Clothes> clothes = _repo.GetAll(1, 100);
+            IEnumerable<Clothes> clothes = await _repo.GetAll(1, 100);
             List<ClothesResponse> toReturn = new List<ClothesResponse>();
 
             foreach(Clothes piece in clothes)
@@ -129,24 +66,24 @@ namespace Services
         }
 
 
-        public bool DeleteClothes(Guid? guid)
+        public async Task<bool>  DeleteClothes(Guid? guid)
         {
             if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Clothes? toRemove = _repo.GetById((Guid)guid);
+            Clothes? toRemove = await _repo.GetById((Guid)guid);
             
             if(toRemove == null) return false;
 
-            _repo.Delete(toRemove);
+            await _repo.Delete(toRemove);
 
             return true;
         }
 
-        public bool SoldClothesByClothesID(Guid? guid)
+        public async Task<bool>  SoldClothesByClothesID(Guid? guid)
         {
             if (guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Clothes? clothes = _repo.GetById((Guid)guid);
+            Clothes? clothes = await _repo.GetById((Guid)guid);
 
             if (clothes == null) return false;
 
@@ -161,11 +98,11 @@ namespace Services
 
         }
 
-        public List<ClothesResponse> GetAllSoldClothes()
+        public async Task<List<ClothesResponse>> GetAllSoldClothes()
         {
             List<ClothesResponse> toReturn = new List<ClothesResponse>();
 
-            IEnumerable<SoldClothes> clothes = _soldRepo.GetAll(1, 100);
+            IEnumerable<SoldClothes> clothes = await _soldRepo.GetAll(1, 100);
 
             foreach(SoldClothes piece in clothes)
             {
@@ -176,9 +113,9 @@ namespace Services
         }
 
 
-        public List<ClothesResponse> GetFilteredClothes(string filterBy, string? filterString)
+        public async Task<List<ClothesResponse>>  GetFilteredClothes(string filterBy, string? filterString)
         {
-            List<ClothesResponse> allClothes = GetAllClothes();
+            List<ClothesResponse> allClothes = await GetAllClothes();
             List<ClothesResponse> MatchingClothes = allClothes;
 
             if(string.IsNullOrEmpty(filterString) || string.IsNullOrEmpty(filterString)) return MatchingClothes;
@@ -217,7 +154,7 @@ namespace Services
             return MatchingClothes;
         }
 
-        public List<ClothesResponse> GetSortedClothes(List<ClothesResponse> allClothes, string orderBy, SortOrderOptions sortOrder)
+        public async Task<List<ClothesResponse>>  GetSortedClothes(List<ClothesResponse> allClothes, string orderBy, SortOrderOptions sortOrder)
         {
             if (string.IsNullOrEmpty(orderBy)) return allClothes;
 
@@ -247,11 +184,11 @@ namespace Services
         }
 
 
-        public ClothesResponse UpdateClothes(ClothesUpdateRequest? clothesUpdateRequest)
+        public async Task<ClothesResponse>  UpdateClothes(ClothesUpdateRequest? clothesUpdateRequest)
         {
             if(clothesUpdateRequest == null) throw new ArgumentNullException(nameof(clothesUpdateRequest));
 
-            Clothes? clothesResponse = _repo.GetById(clothesUpdateRequest.ClothesID);
+            Clothes? clothesResponse = await _repo.GetById(clothesUpdateRequest.ClothesID);
 
             if(clothesResponse == null) throw new ArgumentNullException($"ClothesID does not have a match");
 
@@ -266,7 +203,7 @@ namespace Services
             clothesResponse.Theme = clothesUpdateRequest.Theme;
 
 
-            _repo.Update(clothesResponse);
+            await _repo.Update(clothesResponse);
 
             return clothesResponse.ToClothesResponse();
         }

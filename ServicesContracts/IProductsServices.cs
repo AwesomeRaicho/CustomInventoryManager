@@ -10,14 +10,14 @@ namespace ServicesContracts
 {
     public interface IProductsServices
     {
-        ProductResponse AddProduct(ProductAddRequest? productAddRequest);
-        List<ProductResponse> GetAllProducts();
-        ProductResponse? GetProductByProductID(Guid? productID);
-        List<ProductResponse> GetAllSoldProducts();
-        bool SoldProductByProductID(Guid? guid);
-        bool DeleteProduct(Guid? productID);
-        List<ProductResponse> GetFilteredProduct(string filterBy, string? filterString);
-        List<ProductResponse> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder);
-        ProductResponse UpdateProduct(ProductUpdateRequest? productUpdateRequest);
+        Task<ProductResponse> AddProduct(ProductAddRequest? productAddRequest);
+        Task<List<ProductResponse>>  GetAllProducts();
+        Task<ProductResponse?> GetProductByProductID(Guid? productID);
+        Task<List<ProductResponse>>  GetAllSoldProducts();
+        Task<bool>  SoldProductByProductID(Guid? guid);
+        Task<bool>  DeleteProduct(Guid? productID);
+        Task<List<ProductResponse>>  GetFilteredProduct(string filterBy, string? filterString);
+        Task<List<ProductResponse>>  GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder);
+        Task<ProductResponse>  UpdateProduct(ProductUpdateRequest? productUpdateRequest);
     }
 }

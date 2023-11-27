@@ -16,33 +16,33 @@ namespace ServicesContracts
         /// </summary>
         /// <param name="clothesAddRequest">ClothesAddRequest object</param>
         /// <returns>ClothesResponse object</returns>
-        ClothesResponse AddClothes(ClothesAddRequest? clothesAddRequest);
+        Task<ClothesResponse>  AddClothes(ClothesAddRequest? clothesAddRequest);
 
         /// <summary>
         /// Get all Clothes in DB
         /// </summary>
         /// <returns>All clothes in DB</returns>
-        List<ClothesResponse> GetAllClothes();
+        Task<List<ClothesResponse>>  GetAllClothes();
 
         /// <summary>
         /// Get clothes with ClothedID (Guid)
         /// </summary>
         /// <param name="guid">guid to search and return in DB</param>
         /// <returns>ClothesResponse object</returns>
-        ClothesResponse? GetClothesByClothesID(Guid? guid);
+        Task<ClothesResponse?>  GetClothesByClothesID(Guid? guid);
 
         /// <summary>
         /// get all sold clothes from sold DB table
         /// </summary>
         /// <returns>List<ClothesResponse> object List</returns>
-        List<ClothesResponse> GetAllSoldClothes();
+        Task<List<ClothesResponse>>  GetAllSoldClothes();
 
         /// <summary>
         /// removes clothes from the DB and adds it to the "sold" DB table
         /// </summary>
         /// <param name="guid">Guid id to remove and add to sold DB</param>
         /// <returns>true or false if the Clothes was properly changed tables</returns>
-        bool SoldClothesByClothesID(Guid? guid);
+        Task<bool>  SoldClothesByClothesID(Guid? guid);
 
         /// <summary>
         /// Delete clothes from the DB
@@ -50,7 +50,7 @@ namespace ServicesContracts
         /// <param name="guid">guid id to remove</param>
         /// <returns>true or false if properly removed from main DB
         /// </returns>
-        bool DeleteClothes(Guid? guid);
+        Task<bool>  DeleteClothes(Guid? guid);
 
         /// <summary>
         /// Get a list of the clothes filtered by matching string one of its properties
@@ -58,19 +58,19 @@ namespace ServicesContracts
         /// <param name="sortBy">property to filter by</param>
         /// <param name="sortString">search string that should match with the property</param>
         /// <returns>List<ClothesResponse> Object List</returns>
-        List<ClothesResponse> GetFilteredClothes(string filterBy, string? filterString);
+        Task<List<ClothesResponse>>  GetFilteredClothes(string filterBy, string? filterString);
 
         /// <summary>
         /// sorts List provided by specified property
         /// </summary>
         /// <returns></returns>
-        List<ClothesResponse> GetSortedClothes(List<ClothesResponse> allClothes, string sortBy, SortOrderOptions sortOrder);
+        Task<List<ClothesResponse>>  GetSortedClothes(List<ClothesResponse> allClothes, string sortBy, SortOrderOptions sortOrder);
 
         /// <summary>
         /// update an existing Clothes in DB 
         /// </summary>
         /// <param name="clothesUpdateRequest">ClothesUpdateRequest object </param>
         /// <returns>ClothesResponse object</returns>
-        ClothesResponse UpdateClothes(ClothesUpdateRequest? clothesUpdateRequest);
+        Task<ClothesResponse>  UpdateClothes(ClothesUpdateRequest? clothesUpdateRequest);
     }
 }

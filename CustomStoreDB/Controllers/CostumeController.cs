@@ -20,7 +20,7 @@ namespace CustomStoreDB.Controllers
 
 
         [Route("Costumes")]
-        public IActionResult Costumes(string filterBy, string? searchString, string orderBy = nameof(CostumeResponse.CostumeName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
+        public async Task<IActionResult>  Costumes(string filterBy, string? searchString, string orderBy = nameof(CostumeResponse.CostumeName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
 
             ViewBag.CurrentFilterBy = filterBy;
@@ -38,17 +38,17 @@ namespace CustomStoreDB.Controllers
 
             };
 
-            List<CostumeResponse> costumes = _costumeService.GetFilteredCostumes(filterBy, searchString);
+            List<CostumeResponse> costumes = await _costumeService.GetFilteredCostumes(filterBy, searchString);
 
             //sort 
-            List<CostumeResponse> sortedCostumes = _costumeService.GetSortedCostumes(costumes, orderBy, sortOrder);
+            List<CostumeResponse> sortedCostumes = await _costumeService.GetSortedCostumes(costumes, orderBy, sortOrder);
 
             return View(sortedCostumes);
         }
 
         [Route("costumes/create")]
         [HttpGet]
-        public IActionResult CreateCostume()
+        public IActionResult  CreateCostume()
         {
 
             return View();
@@ -56,7 +56,7 @@ namespace CustomStoreDB.Controllers
 
         [Route("costumes/create")]
         [HttpPost]
-        public IActionResult CreateCostume(CostumeAddRequest costumeAddRequest)
+        public async Task<IActionResult>  CreateCostume(CostumeAddRequest costumeAddRequest)
         {
             if(!ModelState.IsValid)
             {
@@ -65,16 +65,16 @@ namespace CustomStoreDB.Controllers
                 return View();
             }
 
-            _costumeService.AddCostume(costumeAddRequest);
+            await _costumeService.AddCostume(costumeAddRequest);
 
             return RedirectToAction("Costumes", "Costume");
         }
 
         [Route("costumes/edit")]
         [HttpGet]
-        public IActionResult EditCostume(Guid costumeID)
+        public async Task<IActionResult>  EditCostume(Guid costumeID)
         {
-            CostumeResponse? response = _costumeService.GetCostumeByCostumeID(costumeID);
+            CostumeResponse? response = await _costumeService.GetCostumeByCostumeID(costumeID);
 
             if(response == null)
             {
@@ -86,7 +86,7 @@ namespace CustomStoreDB.Controllers
 
         [Route("costumes/edit")]
         [HttpPost]
-        public IActionResult EditCostume(CostumeUpdateRequest costumeUpdateRequest)
+        public async Task<IActionResult>  EditCostume(CostumeUpdateRequest costumeUpdateRequest)
         {
 
             if (!ModelState.IsValid)
@@ -98,16 +98,16 @@ namespace CustomStoreDB.Controllers
 
             //ViewBag.Errors = ModelState.SelectMany(m => m.)
 
-            _costumeService.UpdateCostume(costumeUpdateRequest);
+            await _costumeService.UpdateCostume(costumeUpdateRequest);
 
             return RedirectToAction("costumes");
         }
 
         [Route("costumes/delete")]
         [HttpGet]
-        public IActionResult DeleteCostume(Guid costumeID)
+        public async Task<IActionResult>  DeleteCostume(Guid costumeID)
         {
-            CostumeResponse? costumeResponse = _costumeService.GetCostumeByCostumeID(costumeID);
+            CostumeResponse? costumeResponse = await _costumeService.GetCostumeByCostumeID(costumeID);
 
             if (costumeResponse == null) return RedirectToAction("costumes");
 
@@ -118,9 +118,9 @@ namespace CustomStoreDB.Controllers
 
         [Route("costumes/delete")]
         [HttpPost]
-        public IActionResult DeleteCostume(CostumeUpdateRequest costumeUpdateRequest)
+        public async Task<IActionResult>  DeleteCostume(CostumeUpdateRequest costumeUpdateRequest)
         {
-            CostumeResponse? response = _costumeService.GetCostumeByCostumeID(costumeUpdateRequest.CostumeID);
+            CostumeResponse? response = await _costumeService.GetCostumeByCostumeID(costumeUpdateRequest.CostumeID);
 
 
             if (response == null) return RedirectToAction("costumes");

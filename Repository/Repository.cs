@@ -19,32 +19,32 @@ namespace Repository
         }
 
 
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll(int page, int pageSize)
+        public async Task<IEnumerable<T>> GetAll(int page, int pageSize)
         {
-            return _context.Set<T>().Skip((page - 1) * pageSize).Take(pageSize);
+            return await _context.Set<T>().Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
-        public T? GetById(Guid guid)
+        public async Task<T?> GetById(Guid guid)
         {
-            return _context.Set<T>().Find(guid);
+            return await _context.Set<T>().FindAsync(guid);
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
     }

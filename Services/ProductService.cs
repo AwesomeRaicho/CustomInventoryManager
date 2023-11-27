@@ -24,82 +24,11 @@ namespace Services
             _repo = repository;
             _soldRepo = soldRepo;
 
-
-            //if (false)
-            //{
-            //    ProductAddRequest request1 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Arras,
-            //        Color = "Gold",
-            //        Gender = GenderOptions.Other,
-            //        Size = "3",
-            //        Theme = ThemeOptions.Wedding,
-            //        PurchasePrice = 100.00,
-            //        ProductDescription = "coins for wedding"
-            //    };
-            //    ProductAddRequest request2 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Bow,
-            //        Color = "Red",
-            //        Gender = GenderOptions.Female,
-            //        Size = "small",
-            //        Theme = ThemeOptions.Other,
-            //        PurchasePrice = 30.00,
-            //        ProductDescription = "regular bow"
-            //    };
-            //    ProductAddRequest request3 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Underwear,
-            //        Color = "white",
-            //        Gender = GenderOptions.Female,
-            //        Size = "medium",
-            //        Theme = ThemeOptions.Other,
-            //        PurchasePrice = 35.00,
-            //        ProductDescription = "calsones"
-            //    };
-            //    ProductAddRequest request4 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Arras,
-            //        Color = "Gold",
-            //        Gender = GenderOptions.Other,
-            //        Size = "5",
-            //        Theme = ThemeOptions.Wedding,
-            //        PurchasePrice = 100.00,
-            //        ProductDescription = "coins for wedding"
-            //    };
-            //    ProductAddRequest request5 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Valerina,
-            //        Color = "Gray",
-            //        Gender = GenderOptions.Female,
-            //        Size = "7",
-            //        Theme = ThemeOptions.Other,
-            //        PurchasePrice = 50,
-            //        ProductDescription = ""
-            //    };
-            //    ProductAddRequest request6 = new ProductAddRequest()
-            //    {
-            //        ProductType = ProductTypeOptions.Candles,
-            //        Color = "blue",
-            //        Gender = GenderOptions.Other,
-            //        Size = "large",
-            //        Theme = ThemeOptions.Communion,
-            //        PurchasePrice = 15.00,
-            //        ProductDescription = "Velas"
-            //    };
-
-            //    this.AddProduct(request1);
-            //    this.AddProduct(request2);
-            //    this.AddProduct(request3);
-            //    this.AddProduct(request4);
-            //    this.AddProduct(request5);
-            //    this.AddProduct(request6);
-            //}
         }
 
 
 
-        public ProductResponse AddProduct(ProductAddRequest? productAddRequest)
+        public async Task<ProductResponse> AddProduct(ProductAddRequest? productAddRequest)
         {
             if(productAddRequest == null) throw new ArgumentNullException(nameof(productAddRequest));
 
@@ -109,27 +38,27 @@ namespace Services
             product.ProductID = Guid.NewGuid();
             product.EntryDate = DateTime.Now;
 
-            _repo.Add(product);
+            await _repo.Add(product);
 
             return product.ToProductResponse();
         }
 
-        public bool DeleteProduct(Guid? productID)
+        public async Task<bool> DeleteProduct(Guid? productID)
         {
             if(productID == null) throw new ArgumentNullException(nameof(productID));
 
-            Product? prod = _repo.GetById((Guid)productID);
+            Product? prod = await _repo.GetById((Guid)productID);
 
             if (prod == null) return false;
 
-            _repo.Delete(prod);
+            await _repo.Delete(prod);
 
             return true;
         }
 
-        public List<ProductResponse> GetAllProducts()
+        public async Task<List<ProductResponse>>  GetAllProducts()
         {
-            IEnumerable<Product> products = _repo.GetAll(1,100);
+            IEnumerable<Product> products = await _repo.GetAll(1,100);
 
             List<ProductResponse> toReturn = new List<ProductResponse>();
 
@@ -141,10 +70,10 @@ namespace Services
             return toReturn;
         }
 
-        public List<ProductResponse> GetAllSoldProducts()
+        public async Task<List<ProductResponse>>  GetAllSoldProducts()
         {
             List<ProductResponse> toReturn = new List<ProductResponse>();
-            IEnumerable<SoldProduct> soldProducts = _soldRepo.GetAll(1,100);
+            IEnumerable<SoldProduct> soldProducts = await _soldRepo.GetAll(1,100);
 
             foreach (SoldProduct product in soldProducts)
             {
@@ -155,25 +84,25 @@ namespace Services
 
         }
 
-        public bool SoldProductByProductID(Guid? guid)
+        public async Task<bool>  SoldProductByProductID(Guid? guid)
         {
             if(guid == null) throw new ArgumentNullException(nameof(guid));
 
-            Product? toRemove = _repo.GetById((Guid)guid);
+            Product? toRemove = await _repo.GetById((Guid)guid);
 
             if (toRemove == null) return false;
 
             toRemove.ExitDate = DateTime.Now;
 
-            _repo.Delete(toRemove);
-            _soldRepo.Add(toRemove.ToSoldProduct());
+            await _repo.Delete(toRemove);
+            await _soldRepo.Add(toRemove.ToSoldProduct());
 
             return true;
         }
 
-        public List<ProductResponse> GetFilteredProduct(string filterBy, string? filterString)
+        public async Task<List<ProductResponse>> GetFilteredProduct(string filterBy, string? filterString)
         {
-            List<ProductResponse> allProducts = GetAllProducts();
+            List<ProductResponse> allProducts = await GetAllProducts();
             List<ProductResponse> filteredProducts = allProducts;
 
             
@@ -215,17 +144,17 @@ namespace Services
 
         }
 
-        public ProductResponse? GetProductByProductID(Guid? productID)
+        public async Task<ProductResponse?> GetProductByProductID(Guid? productID)
         {
             if (productID == null) throw new ArgumentNullException(nameof(productID));
-            Product? response = _repo.GetById((Guid)productID);
+            Product? response = await _repo.GetById((Guid)productID);
 
             if (response == null) return null;
 
             return response.ToProductResponse();
         }
 
-        public List<ProductResponse> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder)
+        public async Task<List<ProductResponse>> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder)
         {
             if(sortBy == null) return allProducts;
 
@@ -255,13 +184,13 @@ namespace Services
             return sorted;
         }
 
-        public ProductResponse UpdateProduct(ProductUpdateRequest? productUpdateRequest)
+        public async Task<ProductResponse> UpdateProduct(ProductUpdateRequest? productUpdateRequest)
         {
             if(productUpdateRequest == null) throw new ArgumentNullException(nameof(productUpdateRequest));
 
             ValidationHelper.ModelValidation(productUpdateRequest);
 
-            Product? product = _repo.GetById(productUpdateRequest.ProductID);
+            Product? product = await _repo.GetById(productUpdateRequest.ProductID);
 
             if (product == null) throw new ArgumentException("ID not found in DB");
 
@@ -275,7 +204,7 @@ namespace Services
             product.EntryDate = productUpdateRequest.EntryDate;
             product.ExitDate = productUpdateRequest.ExitDate;
 
-            _repo.Update(product);
+            await _repo.Update(product);
 
             return product.ToProductResponse();
         }

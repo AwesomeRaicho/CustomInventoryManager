@@ -18,7 +18,7 @@ namespace CustomStoreDB.Controllers
         }
 
         [Route("products")]
-        public IActionResult Products(string filterBy, string? SearchString, string orderBy = nameof(ProductResponse.ProductType), SortOrderOptions sortOrder = SortOrderOptions.ASC)
+        public async Task<IActionResult> Products(string filterBy, string? SearchString, string orderBy = nameof(ProductResponse.ProductType), SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
             ViewBag.CurrentFilterBy = filterBy;
             ViewBag.CurrentSearchString = SearchString;
@@ -36,9 +36,9 @@ namespace CustomStoreDB.Controllers
 
             };
 
-            List<ProductResponse> products = _productsServices.GetFilteredProduct(filterBy, SearchString);
+            List<ProductResponse> products = await _productsServices.GetFilteredProduct(filterBy, SearchString);
 
-            List<ProductResponse> sortedProducts = _productsServices.GetSortedProducts(products, orderBy, sortOrder);
+            List<ProductResponse> sortedProducts = await _productsServices.GetSortedProducts(products, orderBy, sortOrder);
 
             return View(sortedProducts);
         }
@@ -69,9 +69,9 @@ namespace CustomStoreDB.Controllers
 
         [Route("products/edit")]
         [HttpGet]
-        public IActionResult EditProduct(Guid productID)
+        public async Task<IActionResult> EditProduct(Guid productID)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productID);
 
             if (response == null) return RedirectToAction("products");
 
@@ -82,13 +82,13 @@ namespace CustomStoreDB.Controllers
 
         [Route("products/edit")]
         [HttpPost]
-        public IActionResult EditProduct(ProductUpdateRequest productUpdateRequest)
+        public async Task<IActionResult> EditProduct(ProductUpdateRequest productUpdateRequest)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
 
             if (response == null) return RedirectToAction("products");
 
-            _productsServices.UpdateProduct(productUpdateRequest);
+            await _productsServices.UpdateProduct(productUpdateRequest);
 
             return RedirectToAction("products");
         }
@@ -97,9 +97,9 @@ namespace CustomStoreDB.Controllers
         // create Delete
         [Route("products/delete")]
         [HttpGet]
-        public IActionResult DeleteProduct(Guid productID)
+        public async Task<IActionResult> DeleteProduct(Guid productID)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productID);
 
             if (response == null) return RedirectToAction("product");
 
@@ -110,13 +110,13 @@ namespace CustomStoreDB.Controllers
 
         [Route("products/delete")]
         [HttpPost]
-        public IActionResult DeleteProduct(ProductUpdateRequest productUpdateRequest)
+        public async Task<IActionResult> DeleteProduct(ProductUpdateRequest productUpdateRequest)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productUpdateRequest.ProductID);
 
             if(response == null) return RedirectToAction("products");
 
-            _productsServices.DeleteProduct(productUpdateRequest.ProductID);
+            await _productsServices.DeleteProduct(productUpdateRequest.ProductID);
 
             return RedirectToAction("products");
 
@@ -125,9 +125,9 @@ namespace CustomStoreDB.Controllers
         //sell a product
         [Route("products/sell")]
         [HttpGet]
-        public IActionResult SellProduct(Guid productID)
+        public async Task<IActionResult> SellProduct(Guid productID)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productID);
 
             if (response == null) return RedirectToAction("products");
 
@@ -138,13 +138,13 @@ namespace CustomStoreDB.Controllers
 
         [Route("products/sell")]
         [HttpPost]
-        public IActionResult SellProduct(ProductResponse productResponse)
+        public async Task<IActionResult> SellProduct(ProductResponse productResponse)
         {
-            ProductResponse? response = _productsServices.GetProductByProductID(productResponse.ProductID);
+            ProductResponse? response = await _productsServices.GetProductByProductID(productResponse.ProductID);
 
             if (response == null) return RedirectToAction("products");
 
-            _productsServices.SoldProductByProductID(productResponse.ProductID);
+            await _productsServices.SoldProductByProductID(productResponse.ProductID);
 
             return RedirectToAction("products");
         }
