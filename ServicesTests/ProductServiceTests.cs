@@ -20,10 +20,19 @@ namespace ServicesTests
         //private fields
         private readonly ITestOutputHelper _testOutputHelper;
 
+        private Mock<IRepository<Product>> _productRepo;
+        private Mock<IRepository<SoldProduct>> _soldProductRepo;
+        private ProductService _productsService;
+        private TestDataSeeder _dataSeeder;
+
         //constructor
         public ProductServiceTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
+            _productRepo = new Mock<IRepository<Product>>();
+            _soldProductRepo = new Mock<IRepository<SoldProduct>>();
+            _productsService = new ProductService(_productRepo.Object, _soldProductRepo.Object);
+            _dataSeeder = new TestDataSeeder();
         }
 
         //tests
@@ -33,14 +42,12 @@ namespace ServicesTests
 
         //null request object
         [Fact]
-        public async void AddProduct_NullRequestObject()
+        public async Task AddProduct_NullRequestObject()
         {
             //Arrange
-            var mock1 = new Mock<IRepository<Product>>();
-            var mock2 = new Mock<IRepository<SoldProduct>>();
 
 
-            ProductService _productsService = new ProductService(mock1.Object, mock2.Object);
+
 
 
             //Assert
@@ -52,321 +59,288 @@ namespace ServicesTests
 
         }
 
-        ////Invalid props
-        //[Fact]
-        //public void AddProduct_invalidProps()
-        //{
-        //    //Arrange
-        //    ProductAddRequest request = new ProductAddRequest();
+        //Invalid props
+        [Fact]
+        public async void AddProduct_invalidProps()
+        {
+            //Arrange
+            ProductAddRequest request = new ProductAddRequest();
 
+            //Assert
+            await Assert.ThrowsAsync<ArgumentException>( async () =>
+            {
+                //Act
+                await _productsService.AddProduct(request);
+            });
+        }
 
-        //    //Assert
-        //    Assert.Throws<ArgumentException>(() =>
-        //    {
-        //        //Act
-        //        _productsService.AddProduct(request);
-        //    });
-        //}
+        //Valid adding of product
+        [Fact]
+        public async Task AddProduct_ValidAdding()
+        {
+            //Arrange
+            ProductAddRequest productAddRequest = new ProductAddRequest()
+            {
+                ProductDescription = "",
+                Gender = GenderOptions.Female,
+                Color = "Red",
+                ProductType = ProductTypeOptions.Crowns,
+                Size = "large",
+                Theme = ThemeOptions.XV,
+                PurchasePrice = 230.00,
+            };
 
-        ////Valid adding of product
-        //[Fact]
-        //public void AddProduct_ValidAdding()
-        //{
-        //    //Arrange
-        //    ProductAddRequest productAddRequest = new ProductAddRequest()
-        //    {
-        //        ProductDescription = "",
-        //        Gender = GenderOptions.Female,
-        //        Color = "Red",
-        //        ProductType = ProductTypeOptions.Crowns,
-        //        Size = "large",
-        //        Theme = ThemeOptions.XV,
-        //        PurchasePrice = 230.00,
-        //    };
+            _productRepo.Setup(x => x.Add(productAddRequest.ToProduct()));
 
-        //    //Act 
-        //    ProductResponse productResponse = _productsService.AddProduct(productAddRequest);
+            //Act 
+            ProductResponse productResponse = await _productsService.AddProduct(productAddRequest);
 
-        //    //Assert
-        //    Assert.True(productResponse.ProductID != Guid.Empty);
+            //Assert
+            Assert.True(productResponse.ProductID != Guid.Empty);
 
-        //}
+        }
 
         #endregion
 
         //GetAllProducts
-        //#region GetAllProducts
-        ////get empty list if no products in DB
-        //[Fact]
-        //public void GetAllProducts_EmptyList()
-        //{
-        //    //Act
-        //    List<ProductResponse> products = _productsService.GetAllProducts();
+        #region GetAllProducts
+        //get empty list if no products in DB
+        [Fact]
+        public async Task GetAllProducts_EmptyList()
+        {
+            //Arrange
+            _productRepo.Setup(x => x.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<Product>());
 
-        //    //Assert
-        //    Assert.Empty(products);
-        //}
+            //Act
+            List<ProductResponse> products = await _productsService.GetAllProducts();
 
-        ////add few costumes
-        //[Fact]
-        //public void GetAllProducts_GetList()
-        //{
-        //    List<ProductAddRequest> request_list = new List<ProductAddRequest>()
-        //    {
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            Gender = GenderOptions.Male,
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Misc,
-        //            PurchasePrice = 233.33,
-        //            Size = "small",
-        //            Theme = ThemeOptions.Communion,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 30.00,
-        //            Theme = ThemeOptions.Other,
-        //        },
+            //Assert
+            Assert.Empty(products);
+        }
 
-        //    };
-        //    List<ProductResponse> product_response_from_add = new List<ProductResponse>();
+        //add few costumes
+        [Fact]
+        public async Task GetAllProducts_GetList()
+        {
+            //Arrange
+            IEnumerable<Product> products = _dataSeeder.GetProducts();
 
-        //    foreach (ProductAddRequest request in request_list)
-        //    {
-        //        product_response_from_add.Add(_productsService.AddProduct(request));
-        //    }
+            _productRepo.Setup(x => x.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(products);
 
-        //    //Act
-        //    List<ProductResponse> product_response_from_Get = _productsService.GetAllProducts();
+            List<ProductResponse> responses_from_add = new List<ProductResponse>();
 
-        //    //Assert
-        //    foreach (ProductResponse response in product_response_from_add)
-        //    {
-        //        Assert.Contains(response, product_response_from_Get);
-        //    }
+            foreach (var product in products)
+            {
+                responses_from_add.Add(product.ToProductResponse());
+            }
 
-        //}
+            //Act
+            List<ProductResponse> product_response_from_Get = await _productsService.GetAllProducts();
 
-        //#endregion
+            //Assert
+            Assert.Equal(responses_from_add, product_response_from_Get);
 
-        ////GetProductByProductID
-        //#region GetProductByProductID
-        ////null costumeID
-        //[Fact]
-        //public void GetProductByProductID_NullID()
-        //{
-        //    //Assert
-        //    Assert.Throws<ArgumentNullException>(() =>
-        //    {
-        //        //Act
-        //        _productsService.SoldProductByProductID(null);
-        //    });
-        //}
-        ////GetCostume
-        //[Fact]
-        //public void GetProductByProductID_GetProperProduct()
-        //{
-        //    //Arrange 
-        //    ProductAddRequest productAddRequest = new ProductAddRequest()
-        //    {
-        //        Color = "Yellow",
-        //        Gender = GenderOptions.Female,
-        //        ProductDescription = "Leotard",
-        //        ProductType = ProductTypeOptions.Leotards,
-        //        PurchasePrice = 25.00,
-        //        Size = "Medium",
-        //        Theme = ThemeOptions.Underware,
-        //    };
+        }
 
-        //    ProductResponse response_from_add = _productsService.AddProduct(productAddRequest);
+        #endregion
 
-        //    Guid guid = response_from_add.ProductID;
+        //GetProductByProductID
+        #region GetProductByProductID
+        //null costumeID
+        [Fact]
+        public async Task GetProductByProductID_NullID()
+        {
+            //Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                //Act
+                await _productsService.SoldProductByProductID(null);
+            });
+        }
+        //GetCostume
+        [Fact]
+        public async Task GetProductByProductID_GetProperProduct()
+        {
+            //Arrange 
+            ProductAddRequest productAddRequest = new ProductAddRequest()
+            {
+                Color = "Yellow",
+                Gender = GenderOptions.Female,
+                ProductDescription = "Leotard",
+                ProductType = ProductTypeOptions.Leotards,
+                PurchasePrice = 25.00,
+                Size = "Medium",
+                Theme = ThemeOptions.Underware,
+            };
 
-        //    //Act
-        //    ProductResponse? response_from_get = _productsService.GetProductByProductID(guid);
+            Product product = productAddRequest.ToProduct();
+            product.ProductID = Guid.NewGuid();
 
-        //    //Assert
-        //    Assert.Equal(response_from_add, response_from_get);
-        //}
-        //#endregion
+            _productRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
 
-        ////GetAllSoldProducts
-        //#region
-        //// get empty List if none in DB
-        //[Fact]
-        //public void GetAllSoldProducts_emptyList()
-        //{
-        //    //Act
-        //    List<ProductResponse> productResponses = _productsService.GetAllSoldProducts();
+            //Act
+            ProductResponse? response_from_get = await _productsService.GetProductByProductID(product.ProductID);
 
-        //    //Assert
-        //    Assert.Empty(productResponses);
-        //}
-        ////get sold costumes
-        //[Fact]
-        //public void GetAllSoldProducts_getEmptyList()
-        //{
-        //    //Arrange
-        //    List<ProductAddRequest> request_list = new List<ProductAddRequest>()
-        //    {
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            Gender = GenderOptions.Male,
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Misc,
-        //            PurchasePrice = 233.33,
-        //            Size = "small",
-        //            Theme = ThemeOptions.Communion,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 30.00,
-        //            Theme = ThemeOptions.Other,
-        //        },
+            //Assert
+            Assert.Equal(product.ToProductResponse(), response_from_get);
+        }
+        #endregion
 
-        //    };
-        //    List<ProductResponse> product_response_from_add = new List<ProductResponse>();
+        //GetAllSoldProducts
+        #region GetAllSoldProducts
+        // get empty List if none in DB
+        [Fact]
+        public async Task GetAllSoldProducts_emptyList()
+        {
+            //Act
+            List<ProductResponse> productResponses = await _productsService.GetAllSoldProducts();
 
-        //    foreach (ProductAddRequest request in request_list)
-        //    {
-        //        product_response_from_add.Add(_productsService.AddProduct(request));
-        //    }
+            //Assert
+            Assert.Empty(productResponses);
+        }
+        //get sold costumes
+        [Fact]
+        public async Task GetAllSoldProducts_getList()
+        {
+            //Arrange
+            IEnumerable<Product> repoProducts = _dataSeeder.GetProducts();
 
-        //    //remove from the DB (Sell)
-        //    foreach (ProductResponse product in product_response_from_add)
-        //    {
-        //        _productsService.SoldProductByProductID(product.ProductID);
-        //    }
+            List<SoldProduct> repoSoldProducts = new List<SoldProduct>();
 
-        //    //Act 
-        //    List<ProductResponse> responses_from_get = _productsService.GetAllSoldProducts();
+            List<ProductResponse> expected_to_compare = new List<ProductResponse>();
 
-        //    //Assert
-        //    foreach (ProductResponse product in product_response_from_add)
-        //    {
-        //        Assert.Contains(product, responses_from_get);
-        //    }
-        //}
-        //#endregion
+            foreach (var repoProduct in repoProducts)
+            {
+                expected_to_compare.Add(repoProduct.ToProductResponse());
+            }
 
-        ////SoldProductByProductID
-        //#region SoldProductByProductID
-        ////should Throw exceptuion if ID if null
-        //[Fact]
-        //public void SoldProductByProductID_NullID()
-        //{
-        //    //Assert
-        //    Assert.Throws<ArgumentNullException>(() =>
-        //    {
-        //        //Act
-        //        _productsService.SoldProductByProductID(null);
-        //    });
-        //}
+            foreach (Product request in repoProducts)
+            {
+                repoSoldProducts.Add(request.ToSoldProduct());
+            }
 
-        ////should be false if id does not exist
-        //[Fact]
-        //public void SoldProductByProductID_NoneExistantID()
-        //{
-        //    //Arrange
-        //    Guid id = Guid.NewGuid();
+            _soldProductRepo.Setup(x => x.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(repoSoldProducts);
 
-        //    //Act
-        //    bool response = _productsService.SoldProductByProductID(id);
+            //Act 
+            List<ProductResponse> responses_from_get = await _productsService.GetAllSoldProducts();
 
-        //    //Assert
-        //    Assert.False(response);
-        //}
+            //Assert
+            Assert.Equal(expected_to_compare, responses_from_get);
+        }
+        #endregion
 
-        //// should throw true if properly removed valid product
-        //[Fact]
-        //public void SoldProductByProductID_ProperSoldOfProduct()
-        //{
-        //    //Arrange
-        //    ProductAddRequest product_request = new ProductAddRequest()
-        //    {
-        //        Color = "Red",
-        //        ProductDescription = "something to wear",
-        //        ProductType = ProductTypeOptions.Bow,
-        //        PurchasePrice = 30.00,
-        //        Theme = ThemeOptions.Other,
-        //    };
+        //SoldProductByProductID
+        #region SoldProductByProductID
+        //should Throw exceptuion if ID if null
+        [Fact]
+        public async Task SoldProductByProductID_NullID()
+        {
+            //Assert
+            await Assert.ThrowsAsync<ArgumentNullException>( async() =>
+            {
+                //Act
+                await _productsService.SoldProductByProductID(null);
+            });
+        }
 
-        //    ProductResponse response_from_add = _productsService.AddProduct(product_request);
+        //should be false if id does not exist
+        [Fact]
+        public async Task SoldProductByProductID_NoneExistantID()
+        {
+            //Arrange
+            Guid id = Guid.NewGuid();
 
-        //    //Act
-        //    bool response_from_soldProduct = _productsService.SoldProductByProductID(response_from_add.ProductID);
+            //Act
+            bool response = await _productsService.SoldProductByProductID(id);
 
-        //    //Assert
-        //    Assert.True(response_from_soldProduct);
+            //Assert
+            Assert.False(response);
+        }
 
-        //    //check if it is contained in the "Sold" DB
-        //    List<ProductResponse> response_list_from_getSold = _productsService.GetAllSoldProducts();
+        // should throw true if properly removed valid product
+        [Fact]
+        public async Task SoldProductByProductID_ProperSoldOfProduct()
+        {
+            //Arrange
+            ProductAddRequest product_request = new ProductAddRequest()
+            {
+                Color = "Red",
+                ProductDescription = "something to wear",
+                ProductType = ProductTypeOptions.Bow,
+                PurchasePrice = 30.00,
+                Theme = ThemeOptions.Other,
+            };
 
-        //    Assert.Contains(response_from_add, response_list_from_getSold);
-        //}
+            ProductResponse response_from_add = await _productsService.AddProduct(product_request);
 
-        //#endregion
+            _productRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product_request.ToProduct());
 
-        ////DeleteProduct
-        //#region DeleteProduct
-        ////should get exception if null ID
-        //[Fact]
-        //public void DeleteProduct_NullID()
-        //{
-        //    //Assert
-        //    Assert.Throws<ArgumentNullException>(() =>
-        //    {
-        //        //Act
-        //        _productsService.DeleteProduct(null);
-        //    });
-        //}
+            //Act
+            bool response_from_soldProduct = await _productsService.SoldProductByProductID(response_from_add.ProductID);
 
-        ////Should throw false if ID does not exist
-        //[Fact]
-        //public void DeleteProduct_NoneExistingID()
-        //{
-        //    //Arrange
-        //    Guid guid = Guid.NewGuid();
+            //Assert
+            Assert.True(response_from_soldProduct);
+        }
 
-        //    //Act
-        //    bool response = _productsService.DeleteProduct(guid);
+        #endregion
 
-        //    //Assert
-        //    Assert.False(response);
+        //DeleteProduct
+        #region DeleteProduct
+        //should get exception if null ID
+        [Fact]
+        public async Task DeleteProduct_NullID()
+        {
+            //Assert
+            await Assert.ThrowsAsync<ArgumentNullException>( async () =>
+            {
+                //Act
+                await _productsService.DeleteProduct(null);
+            });
+        }
 
-        //}
+        //Should throw false if ID does not exist
+        [Fact]
+        public async Task DeleteProduct_NoneExistingID()
+        {
+            //Arrange
+            Guid guid = Guid.NewGuid();
 
-        ////Proper deletion of product
-        //[Fact]
-        //public void DeleteProduct_ExistingID()
-        //{
-        //    //Arrange
-        //    ProductAddRequest request = new ProductAddRequest()
-        //    {
-        //        Color = "Azul",
-        //        ProductDescription = "Para la boda",
-        //        ProductType = ProductTypeOptions.Arras,
-        //        PurchasePrice = 450.00,
-        //        Theme = ThemeOptions.Wedding,
-        //    };
-        //    ProductResponse response_from_add = _productsService.AddProduct(request);
+            //Act
+            bool response = await _productsService.DeleteProduct(guid);
 
-        //    //Act
-        //    bool response_bool_from_deletion = _productsService.DeleteProduct(response_from_add.ProductID);
+            //Assert
+            Assert.False(response);
 
-        //    //Assert
-        //    Assert.True(response_bool_from_deletion);
-        //}
+        }
 
-        //#endregion
+        //Proper deletion of product
+        [Fact]
+        public async Task DeleteProduct_ExistingID()
+        {
+            //Arrange
+            ProductAddRequest request = new ProductAddRequest()
+            {
+                Color = "Azul",
+                ProductDescription = "Para la boda",
+                ProductType = ProductTypeOptions.Arras,
+                PurchasePrice = 450.00,
+                Theme = ThemeOptions.Wedding,
+            };
+
+            Product product = request.ToProduct();
+            product.ProductID = Guid.NewGuid();
+            
+            _productRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(product);
+
+
+            //Act
+            bool response_bool_from_deletion = await _productsService.DeleteProduct(product.ProductID);
+
+            //Assert
+            Assert.True(response_bool_from_deletion);
+        }
+
+        #endregion
 
         ////GetFilteredProduct
         //#region GetFilteredProducts

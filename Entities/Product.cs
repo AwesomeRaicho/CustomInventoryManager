@@ -33,7 +33,7 @@ namespace Entities
                 Size = Size,
                 PurchasePrice = PurchasePrice,
                 EntryDate = EntryDate,
-                ExitDate = ExitDate,
+                ExitDate = DateTime.Now
             };
         }
     }
