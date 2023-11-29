@@ -12,6 +12,7 @@ using Xunit.Abstractions;
 using Xunit.Sdk;
 using Moq;
 using Entities.Sold;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ServicesTests
 {
@@ -342,240 +343,266 @@ namespace ServicesTests
 
         #endregion
 
-        ////GetFilteredProduct
-        //#region GetFilteredProducts
+        //GetFilteredProduct
+        #region GetFilteredProducts
+
+        //should properly filter products
+        [Fact]
+        public async Task GetFilteredProducts_properFiltered()
+        {
+            List<ProductAddRequest> request_list = new List<ProductAddRequest>()
+            {
+                new ProductAddRequest()
+                {
+                    Color = "Red",
+                    Gender = GenderOptions.Male,
+                    ProductDescription = "something to wear",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 233.33,
+                    Size = "small",
+                    Theme = ThemeOptions.Communion,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Red",
+                    ProductDescription = "for hair",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 30.00,
+                    Theme = ThemeOptions.Other,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Azul",
+                    ProductDescription = "Para la boda",
+                    ProductType = ProductTypeOptions.Arras,
+                    PurchasePrice = 450.00,
+                    Theme = ThemeOptions.Wedding,
+                }
+            };
+
+            List<ProductResponse> response_from_add = new List<ProductResponse>();
+            List<Product> repoReturn = new List<Product>();
+
+            foreach (ProductAddRequest request in request_list)
+            {
+                response_from_add.Add(request.ToProduct().ToProductResponse());
+            }
+            foreach (ProductAddRequest request in request_list)
+            {
+                repoReturn.Add(request.ToProduct());
+            }
+
+
+            List<ProductResponse> expected_filter = response_from_add.Where(temp => (!string.IsNullOrEmpty(temp.ProductType)) ? temp.ProductType.Contains("Bo", StringComparison.OrdinalIgnoreCase) : true).ToList();
+
+            _testOutputHelper.WriteLine("Expected");
+            foreach (ProductResponse response in expected_filter)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+            }
+
+            _productRepo.Setup(x => x.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(repoReturn);
+
+            //Act
+            List<ProductResponse> response_from_Getfiltered = await _productsService.GetFilteredProduct(nameof(Product.ProductType), "bo");
+
+            _testOutputHelper.WriteLine("Actual Return: ");
+
+            foreach (ProductResponse response in response_from_Getfiltered)
+            {
+                _testOutputHelper.WriteLine(response.ToString());
+
+            }
+
+
+            //Assert
+            Assert.DoesNotContain(response_from_add[2], response_from_Getfiltered);
+            Assert.Contains(response_from_add[0], response_from_Getfiltered);
+            Assert.Contains(response_from_add[1], response_from_Getfiltered);
 
 
 
-        ////should properly filter products
-        //[Fact]
-        //public void GetFilteredProducts_properFiltered()
-        //{
-        //    List<ProductAddRequest> request_list = new List<ProductAddRequest>()
-        //    {
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            Gender = GenderOptions.Male,
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 233.33,
-        //            Size = "small",
-        //            Theme = ThemeOptions.Communion,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            ProductDescription = "for hair",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 30.00,
-        //            Theme = ThemeOptions.Other,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Azul",
-        //            ProductDescription = "Para la boda",
-        //            ProductType = ProductTypeOptions.Arras,
-        //            PurchasePrice = 450.00,
-        //            Theme = ThemeOptions.Wedding,
-        //        }
-        //    };
+        }
 
-        //    List<ProductResponse> response_from_add = new List<ProductResponse>();
+        //should get all products if search string is empty
+        [Fact]
+        public async Task GetFilteredProducts_getAllWithEmptySearchString()
+        {
+            //Arrange
+            List<ProductAddRequest> request_list = new List<ProductAddRequest>()
+            {
+                new ProductAddRequest()
+                {
+                    Color = "Red",
+                    Gender = GenderOptions.Male,
+                    ProductDescription = "something to wear",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 233.33,
+                    Size = "small",
+                    Theme = ThemeOptions.Communion,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Red",
+                    ProductDescription = "for hair",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 30.00,
+                    Theme = ThemeOptions.Other,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Azul",
+                    ProductDescription = "Para la boda",
+                    ProductType = ProductTypeOptions.Arras,
+                    PurchasePrice = 450.00,
+                    Theme = ThemeOptions.Wedding,
+                }
+            };
 
-        //    foreach (ProductAddRequest request in request_list)
-        //    {
-        //        response_from_add.Add(_productsService.AddProduct(request));
-        //    }
-
-        //    List<ProductResponse> expected_filter = response_from_add.Where(temp => (!string.IsNullOrEmpty(temp.ProductType)) ? temp.ProductType.Contains("Bo", StringComparison.OrdinalIgnoreCase) : true).ToList();
-
-        //    _testOutputHelper.WriteLine("Expected");
-        //    foreach (ProductResponse response in expected_filter)
-        //    {
-        //        _testOutputHelper.WriteLine(response.ToString());
-        //    }
+            List<ProductResponse> response_from_add = new List<ProductResponse>();
+            List<Product> repoResponse = new List<Product>();
 
 
+            foreach (ProductAddRequest request in request_list)
+            {
+                response_from_add.Add(request.ToProduct().ToProductResponse());
+            }
+            foreach (ProductAddRequest request in request_list)
+            {
+                repoResponse.Add(request.ToProduct());
+            }
 
-        //    //Act
-        //    List<ProductResponse> response_from_Getfiltered = _productsService.GetFilteredProduct(nameof(Product.ProductType), "bo");
-
-        //    _testOutputHelper.WriteLine("Actual Return: ");
-
-        //    foreach (ProductResponse response in response_from_Getfiltered)
-        //    {
-        //        _testOutputHelper.WriteLine(response.ToString());
-
-        //    }
-
-
-        //    //Assert
-        //    Assert.DoesNotContain(response_from_add[2], response_from_Getfiltered);
-        //    Assert.Contains(response_from_add[0], response_from_Getfiltered);
-        //    Assert.Contains(response_from_add[1], response_from_Getfiltered);
+            _productRepo.Setup(x => x.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(repoResponse);
 
 
+            //Act
+            List<ProductResponse> response_from_Getfiltered = await  _productsService.GetFilteredProduct(nameof(Product.ProductType), "");
 
-        //}
+            //Assert
+            foreach (ProductResponse response in response_from_add)
+            {
+                Assert.Contains(response, response_from_Getfiltered);
+            }
+        }
+        #endregion
 
-        ////should get all products if search string is empty
-        //[Fact]
-        //public void GetFilteredProducts_getAllWithEmptySearchString()
-        //{
-        //    //Arrange
-        //    List<ProductAddRequest> request_list = new List<ProductAddRequest>()
-        //    {
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            Gender = GenderOptions.Male,
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 233.33,
-        //            Size = "small",
-        //            Theme = ThemeOptions.Communion,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            ProductDescription = "for hair",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 30.00,
-        //            Theme = ThemeOptions.Other,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Azul",
-        //            ProductDescription = "Para la boda",
-        //            ProductType = ProductTypeOptions.Arras,
-        //            PurchasePrice = 450.00,
-        //            Theme = ThemeOptions.Wedding,
-        //        }
-        //    };
+        //GetSortedProducts
+        #region
+        //correctlty returns a sorted List of products
+        [Fact]
+        public async Task GetSortedProducts_PropertSorting()
+        {
+            //Arrange
+            List<ProductAddRequest> request_list = new List<ProductAddRequest>()
+            {
+                new ProductAddRequest()
+                {
+                    Color = "Red",
+                    Gender = GenderOptions.Male,
+                    ProductDescription = "something to wear",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 233.33,
+                    Size = "small",
+                    Theme = ThemeOptions.Communion,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Yello",
+                    ProductDescription = "for hair",
+                    ProductType= ProductTypeOptions.Bow,
+                    PurchasePrice = 30.00,
+                    Theme = ThemeOptions.Other,
+                },
+                new ProductAddRequest()
+                {
+                    Color = "Blue",
+                    ProductDescription = "Para la boda",
+                    ProductType = ProductTypeOptions.Arras,
+                    PurchasePrice = 450.00,
+                    Theme = ThemeOptions.Wedding,
+                }
+            };
 
-        //    List<ProductResponse> response_from_add = new List<ProductResponse>();
-
-        //    foreach (ProductAddRequest request in request_list)
-        //    {
-        //        response_from_add.Add(_productsService.AddProduct(request));
-        //    }
-
-        //    //Act
-        //    List<ProductResponse> response_from_Getfiltered = _productsService.GetFilteredProduct(nameof(Product.ProductType), "");
-
-        //    //Assert
-        //    foreach (ProductResponse response in response_from_add)
-        //    {
-        //        Assert.Contains(response, response_from_Getfiltered);
-        //    }
-        //}
-        //#endregion
-
-        ////GetSortedProducts
-        //#region
-        ////correctlty returns a sorted List of products
-        //[Fact]
-        //public void GetSortedProducts_PropertSorting()
-        //{
-        //    //Arrange
-        //    List<ProductAddRequest> request_list = new List<ProductAddRequest>()
-        //    {
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Red",
-        //            Gender = GenderOptions.Male,
-        //            ProductDescription = "something to wear",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 233.33,
-        //            Size = "small",
-        //            Theme = ThemeOptions.Communion,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Yello",
-        //            ProductDescription = "for hair",
-        //            ProductType= ProductTypeOptions.Bow,
-        //            PurchasePrice = 30.00,
-        //            Theme = ThemeOptions.Other,
-        //        },
-        //        new ProductAddRequest()
-        //        {
-        //            Color = "Blue",
-        //            ProductDescription = "Para la boda",
-        //            ProductType = ProductTypeOptions.Arras,
-        //            PurchasePrice = 450.00,
-        //            Theme = ThemeOptions.Wedding,
-        //        }
-        //    };
-
-        //    List<ProductResponse> response_from_add = new List<ProductResponse>();
-
-        //    foreach (ProductAddRequest request in request_list)
-        //    {
-        //        response_from_add.Add(_productsService.AddProduct(request));
-        //    }
-
-        //    List<ProductResponse> productResponses_ordered = response_from_add.OrderBy(temp => temp.Color).ToList();
-
-        //    //Act
-        //    List<ProductResponse> productResponses_ordered_from_get = _productsService.GetSortedProducts(response_from_add, nameof(Product.Color), SortOrderOptions.ASC);
-
-        //    //Assert
-        //    for (int i = 0; i < productResponses_ordered.Count; i++)
-        //    {
-        //        Assert.Equal(productResponses_ordered[i], productResponses_ordered_from_get[i]);
-        //    }
-        //}
-        //#endregion
-
-        ////UpdateProduct
-        //#region UpdateProduct
-        ////should throw error from if update object is null
-        //[Fact]
-        //public void UpdateProduct_NullUpdateObject()
-        //{
-        //    //Assert
-        //    Assert.Throws<ArgumentNullException>(() =>
-        //    {
-        //        //Act
-        //        _productsService.UpdateProduct(null);
-        //    });
-        //}
-
-        ////properly update a producty
-        //[Fact]
-        //public void UpdateProduct_UpdateProduct()
-        //{
-        //    //Arrange
-        //    ProductAddRequest request = new ProductAddRequest()
-        //    {
-        //        Color = "Blue",
-        //        ProductDescription = "Para la boda",
-        //        ProductType = ProductTypeOptions.Arras,
-        //        PurchasePrice = 450.00,
-        //        Theme = ThemeOptions.Wedding,
-        //    };
+            List<ProductResponse> response_from_add = new List<ProductResponse>();
+            List<Product> repoResponse = new List<Product>();
 
 
-        //    ProductResponse response_from_add = _productsService.AddProduct(request);
-        //    _testOutputHelper.WriteLine(response_from_add.ToString());
+            foreach (ProductAddRequest request in request_list)
+            {
+                response_from_add.Add(request.ToProduct().ToProductResponse());
+            }
+            foreach (ProductAddRequest request in request_list)
+            {
+                repoResponse.Add(request.ToProduct());
+            }
 
-        //    ProductUpdateRequest productUpdateRequest = response_from_add.ToProductUpdateRequest();
+            
 
-        //    productUpdateRequest.Color = "Red";
-        //    productUpdateRequest.ProductDescription = "";
-        //    _testOutputHelper.WriteLine(productUpdateRequest.ToString());
+            List<ProductResponse> productResponses_ordered = response_from_add.OrderBy(temp => temp.Color).ToList();
 
-        //    //Act
-        //    ProductResponse product_response_from_update = _productsService.UpdateProduct(productUpdateRequest);
+            //Act
+            List<ProductResponse> productResponses_ordered_from_get = await _productsService.GetSortedProducts(response_from_add, nameof(Product.Color), SortOrderOptions.ASC);
 
-        //    //Assert
-        //    _testOutputHelper.WriteLine($"{product_response_from_update.Color}");
+            //Assert
+            for (int i = 0; i < productResponses_ordered.Count; i++)
+            {
+                Assert.Equal(productResponses_ordered[i], productResponses_ordered_from_get[i]);
+            }
+        }
+        #endregion
 
-        //    Assert.Equal("Red", product_response_from_update.Color);
-        //    Assert.Equal("", product_response_from_update.ProductDescription);
-        //}
-        //#endregion
+        //UpdateProduct
+        #region UpdateProduct
+        //should throw error from if update object is null
+        [Fact]
+        public async Task UpdateProduct_NullUpdateObject()
+        {
+            //Assert
+            await Assert.ThrowsAsync<ArgumentNullException>( async () =>
+            {
+                //Act
+                await _productsService.UpdateProduct(null);
+            });
+        }
+
+        //properly update a producty
+        [Fact]
+        public async Task UpdateProduct_UpdateProduct()
+        {
+            //Arrange
+            ProductAddRequest request = new ProductAddRequest()
+            {
+                Color = "Blue",
+                ProductDescription = "Para la boda",
+                ProductType = ProductTypeOptions.Arras,
+                PurchasePrice = 450.00,
+                Theme = ThemeOptions.Wedding,
+            };
+
+            Product repoProduct = request.ToProduct();
+            repoProduct.ProductID = Guid.NewGuid();
+
+            ProductResponse response_from_add = request.ToProduct().ToProductResponse();
+
+            _testOutputHelper.WriteLine(response_from_add.ToString());
+
+            ProductUpdateRequest productUpdateRequest = response_from_add.ToProductUpdateRequest();
+
+            productUpdateRequest.Color = "Red";
+            productUpdateRequest.ProductDescription = "";
+            _testOutputHelper.WriteLine(productUpdateRequest.ToString());
+
+            _productRepo.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(repoProduct);
+
+            //Act
+            ProductResponse product_response_from_update = await _productsService.UpdateProduct(productUpdateRequest);
+
+            //Assert
+            _testOutputHelper.WriteLine($"{product_response_from_update.Color}");
+
+            Assert.Equal("Red", product_response_from_update.Color);
+            Assert.Equal("", product_response_from_update.ProductDescription);
+        }
+        #endregion
     }
 }

@@ -137,11 +137,8 @@ namespace Services
                     break;
                 default: 
                     return filteredProducts;
-                   
             }
-
             return filteredProducts;
-
         }
 
         public async Task<ProductResponse?> GetProductByProductID(Guid? productID)
