@@ -90,9 +90,10 @@ namespace Services
 
             clothes.ExitDate = DateTime.Now;
 
-            _repo.Delete(clothes);
 
-            _soldRepo.Add(clothes.ToSoldClothes());
+            await _repo.Delete(clothes);
+
+            await _soldRepo.Add(clothes.ToSoldClothes());
 
             return true;
 
