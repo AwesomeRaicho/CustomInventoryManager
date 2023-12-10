@@ -13,6 +13,8 @@ using Xunit.Sdk;
 using Moq;
 using Entities.Sold;
 using System.Runtime.CompilerServices;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace ServicesTests
 {
@@ -23,6 +25,7 @@ namespace ServicesTests
         private readonly Mock<IRepository<SoldClothes>> _soldClothesRepo;
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IClothesService _clothesService;
+        private readonly Mock<ILogger<ClothesService>> _logger;
 
         //contructor
         public ClothesServiceTests(ITestOutputHelper testOutputHelper)
@@ -30,7 +33,7 @@ namespace ServicesTests
             _clothesRepo = new Mock<IRepository<Clothes>>();
             _soldClothesRepo = new Mock<IRepository<SoldClothes>>();
             _testOutputHelper = testOutputHelper;
-            _clothesService = new ClothesService(_clothesRepo.Object, _soldClothesRepo.Object);
+            _clothesService = new ClothesService(_clothesRepo.Object, _soldClothesRepo.Object, _logger.Object);
         }
 
         //Tests

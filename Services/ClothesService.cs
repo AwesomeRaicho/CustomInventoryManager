@@ -9,6 +9,7 @@ using Entities.Sold;
 using ServicesContracts.DTO;
 using ServicesContracts.Enums;
 using Services.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Services
 {
@@ -17,15 +18,14 @@ namespace Services
         //Private Fields
         private readonly IRepository<Clothes> _repo;
         private readonly IRepository<SoldClothes> _soldRepo;
-
+        private readonly ILogger<ClothesService> _logger;
 
         //Contructor
-        public ClothesService(IRepository<Clothes> clothes, IRepository<SoldClothes> soldRepo) 
+        public ClothesService(IRepository<Clothes> clothes, IRepository<SoldClothes> soldRepo, ILogger<ClothesService> logger) 
         { 
             _repo = clothes;
             _soldRepo = soldRepo;
-
-            
+            _logger = logger;
         }
 
         public async Task<ClothesResponse>  AddClothes(ClothesAddRequest? clothesAddRequest)
@@ -54,6 +54,8 @@ namespace Services
         }
         public async Task<List<ClothesResponse>>  GetAllClothes()
         {
+            _logger.LogInformation("*** Running 'GetAllClothes'");
+
             IEnumerable<Clothes> clothes = await _repo.GetAll(1, 100);
             List<ClothesResponse> toReturn = new List<ClothesResponse>();
 

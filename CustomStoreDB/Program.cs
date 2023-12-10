@@ -20,6 +20,12 @@ builder.Services.AddDbContext<AllDbContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
 
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.AddConsole();
+    logging.AddDebug();
+});
+
 var app = builder.Build();
 
 app.UseStaticFiles();
